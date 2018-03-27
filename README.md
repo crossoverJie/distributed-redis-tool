@@ -3,6 +3,16 @@
 This is a simple distributed lock based on Redis.
 
 
+
+## Features
+
+- [x] High performance.
+- [x] No deadlock.
+- [x] Support Redis cluster, single.
+- [x] Non-blocking lock.
+- [ ] blocking lock.
+
+
 ## Quick start
 
 ### Install
@@ -72,11 +82,3 @@ Non-blocking lock like this:
 ```
 
 
-
-## Features
-
-- [x] High performance.
-- [x] No deadlock.
-- [x] Support Redis cluster, single.
-- [x] Non-blocking lock.
-- [ ] blocking lock.
