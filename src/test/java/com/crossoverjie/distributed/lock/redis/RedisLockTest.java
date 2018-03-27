@@ -24,7 +24,7 @@ public class RedisLockTest {
 
     @Test
     public void tryLock() throws Exception {
-        boolean locktest = redisLock.tryLock("reviewSubItem", UUID.randomUUID().toString());
+        boolean locktest = redisLock.tryLock("test", UUID.randomUUID().toString());
         System.out.println("locktest=" + locktest);
     }
 
