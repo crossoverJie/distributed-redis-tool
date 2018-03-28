@@ -7,7 +7,7 @@ import redis.clients.jedis.JedisCommands;
 import java.util.Collections;
 
 /**
- * Function: 分布式锁
+ * Function: distributed lock
  *
  * @author crossoverJie
  *         Date: 26/03/2018 11:09
@@ -29,18 +29,21 @@ public class RedisLock<T extends JedisCommands> {
     private T jedis;
 
     /**
-     * 时间 毫秒
+     * time millisecond
      */
     private static final int TIME = 1000 ;
 
     /**
-     * 加锁 非阻塞锁
+     * Non-blocking lock
      * @param key
+     *        lock business type
      * @param request
-     *        请求
+     *        value
      *
-     * 默认加锁 10 秒
      * @return
+     *        true lock success
+     *        false lock fail
+     *     
      */
     public  boolean tryLock(String key, String request) {
         String result = this.jedis.set(LOCK_PREFIX + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
@@ -54,20 +57,18 @@ public class RedisLock<T extends JedisCommands> {
 
 
     /**
-     * 阻塞锁
+     * Non-blocking lock
      * @param key
+     *        lock business type
      * @param request
-     */
-    public void lock(String key, String request){
-
-    }
-
-    /**
-     * 加锁 非阻塞锁
-     * @param key
-     * @param request
+     *        value
      * @param expireTime
+     *        custom expireTime
+     *
      * @return
+     *        true lock success
+     *        false lock fail
+     *
      */
     public  boolean tryLock( String key, String request, int expireTime) {
         String result = this.jedis.set(LOCK_PREFIX + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
@@ -79,11 +80,12 @@ public class RedisLock<T extends JedisCommands> {
         }
     }
 
-
     /**
-     * 解锁
+     * unlock
      * @param key
+     *
      * @param request
+     *        request must be the same as lock request
      * @return
      */
     public  boolean unlock(String key,String request){
@@ -104,6 +106,16 @@ public class RedisLock<T extends JedisCommands> {
         }else {
             return false ;
         }
+    }
+
+
+    /**
+     * blocking lock
+     * @param key
+     * @param request
+     */
+    public void lock(String key, String request){
+
     }
 
     public void setJedis(T jedis) {
