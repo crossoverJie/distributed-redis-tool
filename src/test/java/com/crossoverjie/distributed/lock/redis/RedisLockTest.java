@@ -29,11 +29,26 @@ public class RedisLockTest {
     }
 
     @Test
+    public void tryLock2() throws Exception {
+        boolean locktest = redisLock.tryLock("test", UUID.randomUUID().toString(),10 * 1000);
+        System.out.println("locktest=" + locktest);
+    }
+
+    @Test
     public void lock() throws Exception {
         long start = System.currentTimeMillis();
         redisLock.lock("test", UUID.randomUUID().toString());
         long end = System.currentTimeMillis();
         System.out.println("lock success expire=" + (end - start));
+    }
+
+
+    @Test
+    public void lock2() throws Exception {
+        long start = System.currentTimeMillis();
+        boolean lock = redisLock.lock("test", UUID.randomUUID().toString(), 100);
+        long end = System.currentTimeMillis();
+        System.out.println("lock success expire=" + (end - start) + " lock = " +lock) ;
     }
 
     @Test

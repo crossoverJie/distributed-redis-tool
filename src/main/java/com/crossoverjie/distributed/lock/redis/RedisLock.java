@@ -60,6 +60,48 @@ public class RedisLock<T extends JedisCommands> {
         }
     }
 
+    /**
+     * blocking lock
+     * @param key
+     * @param request
+     */
+    public void lock(String key, String request) throws InterruptedException {
+
+        for (;;){
+            String result = this.jedis.set(LOCK_PREFIX + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
+            if (LOCK_MSG.equals(result)){
+                break ;
+            }
+
+            Thread.sleep(DEFAULT_SLEEP_TIME) ;
+        }
+
+    }
+
+    /**
+     * blocking lock,custom time
+     * @param key
+     * @param request
+     * @param blockTime
+     *        custom time
+     * @return
+     * @throws InterruptedException
+     */
+    public boolean lock(String key, String request,int blockTime) throws InterruptedException {
+
+        while (blockTime >= 0){
+
+            String result = this.jedis.set(LOCK_PREFIX + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
+            if (LOCK_MSG.equals(result)){
+                return true ;
+            }
+            blockTime -= DEFAULT_SLEEP_TIME ;
+
+            Thread.sleep(DEFAULT_SLEEP_TIME) ;
+        }
+        return false ;
+    }
+
 
     /**
      * Non-blocking lock
@@ -85,24 +127,6 @@ public class RedisLock<T extends JedisCommands> {
         }
     }
 
-
-    /**
-     * blocking lock
-     * @param key
-     * @param request
-     */
-    public void lock(String key, String request) throws InterruptedException {
-
-        for (;;){
-            String result = this.jedis.set(LOCK_PREFIX + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
-            if (LOCK_MSG.equals(result)){
-                break ;
-            }
-
-            Thread.sleep(DEFAULT_SLEEP_TIME) ;
-        }
-
-    }
 
     /**
      * unlock
