@@ -58,16 +58,6 @@
             </plugin>
 
 
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>4.3.0</version>
-                <configuration>
-                    <repoToken>aface8a1-8bdb-4365-ab02-f9e4d208b9c1</repoToken>
-                </configuration>
-            </plugin>
-
-
         </plugins>
     </build>
 
