@@ -74,7 +74,7 @@ public class RedisLockTest {
 
     @Test
     public void unlock() throws Exception {
-        boolean locktest = redisLock.unlock("test", "ec8ebca0-4ba0-4b23-99a8-b35fbba3629e");
+        boolean locktest = redisLock.unlock("test", "ec8ebca0-14ba0-4b23-99a8-b35fbba3629e");
         System.out.println("locktest=" + locktest);
     }
 
