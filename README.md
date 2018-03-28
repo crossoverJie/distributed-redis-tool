@@ -32,8 +32,8 @@ maven dependency:
 
 ```xml
 <dependency>
-    <groupId>com.crossoverjie.distributed-lock</groupId>
-    <artifactId>redis-lock</artifactId>
+    <groupId>com.crossoverjie.opensource</groupId>
+    <artifactId>distributed-redis-lock</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
