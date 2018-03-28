@@ -10,7 +10,7 @@ This is a simple distributed lock based on Redis.
 - [x] No deadlock.
 - [x] Support Redis cluster, single.
 - [x] Non-blocking lock.
-- [ ] blocking lock.
+- [x] blocking lock.
 
 
 ## Quick start
