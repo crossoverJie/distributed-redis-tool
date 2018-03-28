@@ -1,0 +1,16 @@
+language: java
+
+before_install:
+  - pip install --user codecov
+
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true
+script: mvn -DskipTests=true clean install
+after_success:
+  - mvn clean test jacoco:report coveralls:report
+  - codecov
+  - bash <(curl -s https://codecov.io/bash)
+
+
+branches:
+  only:
+    - master

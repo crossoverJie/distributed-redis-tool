@@ -1,5 +1,9 @@
 # distributed-lock-redis
 
+[![Build Status](https://travis-ci.org/crossoverJie/distributed-lock-redis.svg?branch=master)](https://travis-ci.org/crossoverJie/distributed-lock-redis)
+
+
+
 This is a simple distributed lock based on Redis.
 
 
