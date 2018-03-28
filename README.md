@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/crossoverJie/distributed-lock-redis.svg?branch=master)](https://travis-ci.org/crossoverJie/distributed-lock-redis)
 
-
+[![codecov](https://codecov.io/gh/crossoverJie/distributed-lock-redis/branch/master/graph/badge.svg)](https://codecov.io/gh/crossoverJie/distributed-lock-redis)
 
 This is a simple distributed lock based on Redis.
 
