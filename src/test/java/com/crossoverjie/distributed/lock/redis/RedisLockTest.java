@@ -29,6 +29,14 @@ public class RedisLockTest {
     }
 
     @Test
+    public void lock() throws Exception {
+        long start = System.currentTimeMillis();
+        redisLock.lock("test", UUID.randomUUID().toString());
+        long end = System.currentTimeMillis();
+        System.out.println("lock success expire=" + (end - start));
+    }
+
+    @Test
     public void unlock() throws Exception {
         boolean locktest = redisLock.unlock("test", "ec8ebca0-4ba0-4b23-99a8-b35fbba3629e");
         System.out.println("locktest=" + locktest);

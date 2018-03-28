@@ -25,6 +25,11 @@ public class RedisLock<T extends JedisCommands> {
 
     private static final String LOCK_PREFIX = "lock_" ;
 
+    /**
+     * default sleep time
+     */
+    private static final int DEFAULT_SLEPP_TIME = 100 ;
+
 
     private T jedis;
 
@@ -80,6 +85,25 @@ public class RedisLock<T extends JedisCommands> {
         }
     }
 
+
+    /**
+     * blocking lock
+     * @param key
+     * @param request
+     */
+    public void lock(String key, String request) throws InterruptedException {
+
+        for (;;){
+            String result = this.jedis.set(LOCK_PREFIX + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
+            if (LOCK_MSG.equals(result)){
+                break ;
+            }
+
+            Thread.sleep(DEFAULT_SLEPP_TIME) ;
+        }
+
+    }
+
     /**
      * unlock
      * @param key
@@ -89,7 +113,7 @@ public class RedisLock<T extends JedisCommands> {
      * @return
      */
     public  boolean unlock(String key,String request){
-        //lua 脚本
+        //lua script
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
         Object result = null ;
@@ -109,14 +133,7 @@ public class RedisLock<T extends JedisCommands> {
     }
 
 
-    /**
-     * blocking lock
-     * @param key
-     * @param request
-     */
-    public void lock(String key, String request){
 
-    }
 
     public void setJedis(T jedis) {
         this.jedis = jedis;
