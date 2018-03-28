@@ -36,7 +36,7 @@ public class WrongInstanceTest {
     @Test(expected = RuntimeException.class)
     public void unlock() throws Exception {
 
-        Mockito.when(redisLock.unlock(Mockito.anyString(),Mockito.anyString())).thenThrow(RuntimeException.class) ;
+        Mockito.when(redisLock.unlock(Mockito.anyString(),Mockito.anyString())).thenThrow(new RuntimeException()) ;
         redisLock.unlock("test", "ec8ebca0-14ba0-4b23-99a8-b35fbba3629e");
 
 
