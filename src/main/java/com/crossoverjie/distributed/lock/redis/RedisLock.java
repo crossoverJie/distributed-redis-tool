@@ -28,7 +28,7 @@ public class RedisLock<T extends JedisCommands> {
     /**
      * default sleep time
      */
-    private static final int DEFAULT_SLEPP_TIME = 100 ;
+    private static final int DEFAULT_SLEEP_TIME = 100 ;
 
 
     private T jedis;
@@ -99,7 +99,7 @@ public class RedisLock<T extends JedisCommands> {
                 break ;
             }
 
-            Thread.sleep(DEFAULT_SLEPP_TIME) ;
+            Thread.sleep(DEFAULT_SLEEP_TIME) ;
         }
 
     }
