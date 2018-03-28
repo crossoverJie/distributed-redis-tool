@@ -91,7 +91,7 @@ other apis:
 //blocking lock
 redisLock.lock(String key, String request);
 
-//blocking lock ,costom block time
+//blocking lock, costom block time
 redisLock.lock(String key, String request,int blockTime);
 
 ```
