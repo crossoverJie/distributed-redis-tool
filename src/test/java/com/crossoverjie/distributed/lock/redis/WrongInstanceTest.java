@@ -41,4 +41,14 @@ public class WrongInstanceTest {
 
 
     }
+
+
+    @Test
+    public void unlockFalse() throws Exception {
+
+        boolean locktest = redisLock.unlock("test", "ec8ebca0-14ba0-4b23-99a8-b35fbba3629e");
+
+        Assert.assertFalse(locktest);
+
+    }
 }

@@ -146,7 +146,8 @@ public class RedisLock<T extends JedisCommands> {
         }else if (jedis instanceof JedisCluster){
             result = ((JedisCluster)this.jedis).eval(script, Collections.singletonList(LOCK_PREFIX + key), Collections.singletonList(request));
         }else {
-            throw new RuntimeException("instance is error") ;
+            //throw new RuntimeException("instance is error") ;
+            return false ;
         }
 
         if (UNLOCK_MSG.equals(result)){
