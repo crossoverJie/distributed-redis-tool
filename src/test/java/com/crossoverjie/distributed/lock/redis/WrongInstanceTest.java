@@ -33,7 +33,7 @@ public class WrongInstanceTest {
 
     }
 
-    @Test(expected = RuntimeException.class)
+    //@Test(expected = RuntimeException.class)
     public void unlock() throws Exception {
 
         Mockito.when(redisLock.unlock(Mockito.anyString(),Mockito.anyString())).thenThrow(new RuntimeException()) ;
