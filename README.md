@@ -84,4 +84,19 @@ Non-blocking lock like this:
 
 ```
 
+other apis:
+
+
+```java
+//blocking lock
+redisLock.lock(String key, String request);
+
+//blocking lock ,costom block time
+redisLock.lock(String key, String request,int blockTime);
+
+```
+
+## Contact
+
+Mail: crossoverJie@gmail.com
 
