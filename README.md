@@ -32,7 +32,7 @@ maven dependency:
 
 ```xml
 <dependency>
-    <groupId>com.crossoverjie.opensource</groupId>
+    <groupId>top.crossoverjie.opensource</groupId>
     <artifactId>distributed-redis-lock</artifactId>
     <version>1.0.0</version>
 </dependency>
@@ -84,7 +84,7 @@ Non-blocking lock like this:
 
 ```
 
-other apis:
+Other apis:
 
 
 ```java
