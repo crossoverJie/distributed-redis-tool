@@ -18,13 +18,6 @@ This is a simple distributed lock based on Redis.
 
 ## Quick start
 
-### Install
-
-```
-git clone https://github.com/crossoverJie/distributed-lock-redis.git
-
-mvn clean install
-```
 
 ### How to use?
 
