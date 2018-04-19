@@ -12,11 +12,11 @@
     </parent>
 
     <groupId>top.crossoverjie.opensource</groupId>
-    <artifactId>distributed-redis-lock</artifactId>
+    <artifactId>distributed-redis-tool</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>distributed-lock</name>
-    <description>This is a simple distributed lock based on Redis.</description>
+    <description>This is a simple distributed tools based on Redis.</description>
     <inceptionYear>2018</inceptionYear>
 
 
