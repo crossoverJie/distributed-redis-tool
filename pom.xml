@@ -23,13 +23,13 @@
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/crossoverJie/distributed-lock-redis/issues</url>
+        <url>https://github.com/crossoverJie/distributed-redis-tool/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/crossoverJie/distributed-lock-redis</url>
-        <connection>scm:git:git@github.com:crossoverJie/distributed-lock-redis.git</connection>
-        <developerConnection>scm:git:git@github.com:crossoverJie/distributed-lock-redis.git</developerConnection>
+        <url>https://github.com/crossoverJie/distributed-redis-tool</url>
+        <connection>scm:git:git@github.com:crossoverJie/distributed-redis-tool.git</connection>
+        <developerConnection>scm:git:git@github.com:crossoverJie/distributed-redis-tool.git</developerConnection>
     </scm>
 
     <developers>
