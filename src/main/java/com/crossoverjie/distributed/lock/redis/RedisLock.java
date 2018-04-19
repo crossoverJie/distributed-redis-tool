@@ -4,7 +4,13 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisCommands;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Function: distributed lock
@@ -37,6 +43,15 @@ public class RedisLock<T extends JedisCommands> {
      * time millisecond
      */
     private static final int TIME = 1000 ;
+
+    /**
+     * lua script
+     */
+    private String script ;
+
+    public RedisLock() {
+        buildScript() ;
+    }
 
     /**
      * Non-blocking lock
@@ -138,7 +153,6 @@ public class RedisLock<T extends JedisCommands> {
      */
     public  boolean unlock(String key,String request){
         //lua script
-        String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
         Object result = null ;
         if (jedis instanceof Jedis){
@@ -158,6 +172,36 @@ public class RedisLock<T extends JedisCommands> {
     }
 
 
+    /**
+     * read lua script
+     */
+    private void buildScript(){
+
+        URL resource = this.getClass().getResource("/" + "lock.lua");
+        String fileName = resource.getFile();
+
+        FileInputStream in = null;
+        String encoding = "UTF-8";
+        File file = new File(fileName);
+        Long length = file.length();
+        byte[] fileContent = new byte[length.intValue()];
+        try {
+            in = new FileInputStream(file);
+            in.read(fileContent);
+
+            script = new String(fileContent, encoding);
+        } catch (IOException e) {
+            System.err.println(e.getStackTrace());
+        }finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                System.err.println(e.getStackTrace());
+            }
+        }
+
+
+    }
 
 
     public void setJedis(T jedis) {
