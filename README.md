@@ -28,8 +28,8 @@ maven dependency:
 ```xml
 <dependency>
     <groupId>top.crossoverjie.opensource</groupId>
-    <artifactId>distributed-redis-lock</artifactId>
-    <version>1.0.0</version>
+    <artifactId>distributed-redis-tool</artifactId>
+    <version>1.0.1</version>
 </dependency>
 ```
 
