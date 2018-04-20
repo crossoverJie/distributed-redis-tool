@@ -1,4 +1,4 @@
-# distributed-lock-redis
+# distributed-redis-tool
 
 [![Build Status](https://travis-ci.org/crossoverJie/distributed-redis-tool.svg?branch=master)](https://travis-ci.org/crossoverJie/distributed-redis-tool)
 [![codecov](https://codecov.io/gh/crossoverJie/distributed-lock-redis/branch/master/graph/badge.svg)](https://codecov.io/gh/crossoverJie/distributed-lock-redis)

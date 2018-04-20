@@ -12,24 +12,24 @@
     </parent>
 
     <groupId>top.crossoverjie.opensource</groupId>
-    <artifactId>distributed-redis-lock</artifactId>
+    <artifactId>distributed-redis-tool</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>distributed-lock</name>
-    <description>This is a simple distributed lock based on Redis.</description>
+    <description>This is a simple distributed tools based on Redis.</description>
     <inceptionYear>2018</inceptionYear>
 
 
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/crossoverJie/distributed-lock-redis/issues</url>
+        <url>https://github.com/crossoverJie/distributed-redis-tool/issues</url>
     </issueManagement>
 
     <scm>
-        <url>https://github.com/crossoverJie/distributed-lock-redis</url>
-        <connection>scm:git:git@github.com:crossoverJie/distributed-lock-redis.git</connection>
-        <developerConnection>scm:git:git@github.com:crossoverJie/distributed-lock-redis.git</developerConnection>
+        <url>https://github.com/crossoverJie/distributed-redis-tool</url>
+        <connection>scm:git:git@github.com:crossoverJie/distributed-redis-tool.git</connection>
+        <developerConnection>scm:git:git@github.com:crossoverJie/distributed-redis-tool.git</developerConnection>
     </scm>
 
     <developers>
