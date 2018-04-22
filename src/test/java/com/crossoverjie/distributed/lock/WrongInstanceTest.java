@@ -1,14 +1,12 @@
-package com.crossoverjie.distributed.lock.redis;
+package com.crossoverjie.distributed.lock;
 
 import junit.framework.Assert;
-import org.easymock.internal.RuntimeExceptionWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ShardedJedis;
 
 /**

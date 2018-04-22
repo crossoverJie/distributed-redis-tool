@@ -1,4 +1,4 @@
-package com.crossoverjie.distributed.lock.redis;
+package com.crossoverjie.distributed.lock;
 
 import org.junit.Test;
 

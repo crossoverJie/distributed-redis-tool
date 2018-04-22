@@ -1,5 +1,6 @@
-package com.crossoverjie.distributed.lock.redis;
+package com.crossoverjie.distributed.lock;
 
+import com.crossoverjie.distributed.util.ScriptUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisCommands;
@@ -176,31 +177,7 @@ public class RedisLock<T extends JedisCommands> {
      * read lua script
      */
     private void buildScript(){
-
-        URL resource = this.getClass().getResource("/" + "lock.lua");
-        String fileName = resource.getFile();
-
-        FileInputStream in = null;
-        String encoding = "UTF-8";
-        File file = new File(fileName);
-        Long length = file.length();
-        byte[] fileContent = new byte[length.intValue()];
-        try {
-            in = new FileInputStream(file);
-            in.read(fileContent);
-
-            script = new String(fileContent, encoding);
-        } catch (IOException e) {
-            System.err.println(e.getStackTrace());
-        }finally {
-            try {
-                in.close();
-            } catch (IOException e) {
-                System.err.println(e.getStackTrace());
-            }
-        }
-
-
+        script = ScriptUtil.getScript("lock.lua") ;
     }
 
 

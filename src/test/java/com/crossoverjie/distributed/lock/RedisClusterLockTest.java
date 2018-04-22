@@ -1,4 +1,4 @@
-package com.crossoverjie.distributed.lock.redis;
+package com.crossoverjie.distributed.lock;
 
 import junit.framework.Assert;
 import org.junit.Before;
@@ -10,7 +10,6 @@ import org.mockito.MockitoAnnotations;
 import redis.clients.jedis.JedisCluster;
 
 
-import java.util.Collections;
 import java.util.UUID;
 
 
