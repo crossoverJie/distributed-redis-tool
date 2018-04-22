@@ -21,6 +21,6 @@ else
     -- 没有达到阈值 value + 1
     redis.call("INCRBY", key, 1)
     redis.call("EXPIRE", key, 2)
-    return 1
+    return curentLimit + 1
 end
 
