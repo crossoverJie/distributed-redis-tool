@@ -30,8 +30,8 @@ public class RedisLimitTest {
             executorServicePool.execute(new Worker(i));
         }
 
-        executorServicePool.shutdown() ;
-        while (!executorServicePool.awaitTermination(1,TimeUnit.SECONDS)){
+        executorServicePool.shutdown();
+        while (!executorServicePool.awaitTermination(1, TimeUnit.SECONDS)) {
             logger.info("worker running");
         }
         logger.info("worker over");
@@ -45,10 +45,13 @@ public class RedisLimitTest {
     }
 
     private void init() {
-        redisLimit = new RedisLimit(100);
         HostAndPort hostAndPort = new HostAndPort("10.19.13.51", 7000);
         JedisCluster jedisCluster = new JedisCluster(hostAndPort);
-        redisLimit.setJedis(jedisCluster);
+
+        redisLimit = new RedisLimit.Builder<>(jedisCluster)
+                .limit(100)
+                .build();
+
     }
 
     public static void initThread() {
@@ -60,9 +63,9 @@ public class RedisLimitTest {
     }
 
 
-    private static class Worker implements Runnable{
+    private static class Worker implements Runnable {
 
-        private int index ;
+        private int index;
 
         public Worker(int index) {
             this.index = index;
@@ -71,10 +74,10 @@ public class RedisLimitTest {
         @Override
         public void run() {
             boolean limit = redisLimit.limit();
-            if (!limit){
-                logger.info("限流了 limit={},index={}",limit,index);
-            }else {
-                logger.info("=======index{}===通过=====",index);
+            if (!limit) {
+                logger.info("限流了 limit={},index={}", limit, index);
+            } else {
+                logger.info("=======index{}===通过=====", index);
 
             }
         }
