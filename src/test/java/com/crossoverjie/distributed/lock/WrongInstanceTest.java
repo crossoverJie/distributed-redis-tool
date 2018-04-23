@@ -18,7 +18,6 @@ import redis.clients.jedis.ShardedJedis;
  */
 public class WrongInstanceTest {
 
-    @InjectMocks
     private RedisLock redisLock;
 
     @Mock
@@ -27,7 +26,11 @@ public class WrongInstanceTest {
     @Before
     public void setBefore() {
         MockitoAnnotations.initMocks(this);
-        redisLock.setJedis(jedis);
+        redisLock = new RedisLock.Builder(jedis)
+                .lockPrefix("lock_test")
+                .sleepTime(100)
+                .build();
+
 
     }
 

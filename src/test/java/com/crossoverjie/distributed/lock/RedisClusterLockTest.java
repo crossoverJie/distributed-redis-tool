@@ -16,7 +16,6 @@ import java.util.UUID;
 public class RedisClusterLockTest {
 
 
-    @InjectMocks
     private RedisLock redisLock;
 
     @Mock
@@ -25,7 +24,11 @@ public class RedisClusterLockTest {
     @Before
     public void setBefore() {
         MockitoAnnotations.initMocks(this);
-        redisLock.setJedis(jedisCluster);
+
+        redisLock = new RedisLock.Builder(jedisCluster)
+                .lockPrefix("lock_test")
+                .sleepTime(100)
+                .build();
 
         //redisLock = new RedisLock();
         //HostAndPort hostAndPort = new HostAndPort("10.19.13.51", 7000);

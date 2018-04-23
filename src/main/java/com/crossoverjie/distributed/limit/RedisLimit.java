@@ -18,7 +18,7 @@ import java.util.Collections;
  */
 public class RedisLimit {
 
-    private Object jedis;
+    private JedisCommands jedis;
     private int limit = 200;
 
     private static final int FAIL_CODE = 0;
@@ -67,7 +67,10 @@ public class RedisLimit {
     }
 
 
-
+    /**
+     *  the builder
+     * @param <T>
+     */
     public static class Builder<T extends JedisCommands>{
         private T jedis = null ;
 

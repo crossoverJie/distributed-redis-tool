@@ -18,7 +18,6 @@ import redis.clients.jedis.Jedis;
  */
 public class RedisTest {
 
-    @InjectMocks
     private RedisLock redisLock;
 
     @Mock
@@ -27,7 +26,10 @@ public class RedisTest {
     @Before
     public void setBefore() {
         MockitoAnnotations.initMocks(this);
-        redisLock.setJedis(jedis);
+        redisLock = new RedisLock.Builder(jedis)
+                .lockPrefix("lock_test")
+                .build();
+
 
     }
 
