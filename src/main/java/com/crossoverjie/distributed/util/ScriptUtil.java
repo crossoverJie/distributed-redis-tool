@@ -1,9 +1,6 @@
 package com.crossoverjie.distributed.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URL;
+import java.io.*;
 
 /**
  * Function:
@@ -16,34 +13,25 @@ public class ScriptUtil {
 
     /**
      * return lua script String
+     *
      * @param path
      * @return
      */
-    public static String getScript(String path){
-        String script = null;
-        URL resource = ScriptUtil.class.getResource("/" + path);
-        String fileName = resource.getFile();
+    public static String getScript(String path) {
+        StringBuilder sb = new StringBuilder();
 
-        FileInputStream in = null;
-        String encoding = "UTF-8";
-        File file = new File(fileName);
-        Long length = file.length();
-        byte[] fileContent = new byte[length.intValue()];
+        InputStream stream = ScriptUtil.class.getClassLoader().getResourceAsStream(path);
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
         try {
-            in = new FileInputStream(file);
-            in.read(fileContent);
 
-            script = new String(fileContent, encoding);
+            String str = "";
+            while ((str = br.readLine()) != null) {
+                sb.append(str).append(System.lineSeparator());
+            }
+
         } catch (IOException e) {
             System.err.println(e.getStackTrace());
-        }finally {
-            try {
-                in.close();
-            } catch (IOException e) {
-                System.err.println(e.getStackTrace());
-            }
         }
-
-        return script;
+        return sb.toString();
     }
 }
