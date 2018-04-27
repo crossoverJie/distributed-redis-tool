@@ -25,6 +25,9 @@ Mail: crossoverJie@gmail.com
 ![weixinchat.jpg](https://crossoverjie.top/uploads/weixinchat.jpg)
 
 
+
+## Distributed lock
+
 ### Features
 
 - [x] High performance.
@@ -108,6 +111,8 @@ redisLock.lock(String key, String request,int blockTime);
 
 
 ----
+
+## Distributed limiting
 ### Features
 
 - [x] High performance.
