@@ -5,11 +5,22 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/top.crossoverjie.opensource/distributed-redis-tool/badge.svg)](https://maven-badges.herokuapp.com/maven-central/top.crossoverjie.opensource/distributed-redis-tool/)
 
 
-This is a simple distributed lock based on Redis.
+This is a simple distributed tools based on Redis.
 
 
+## Distributed lock
 
-## Features
+
+## Distributed limiting
+
+
+## Contact
+
+Mail: crossoverJie@gmail.com
+
+![weixinchat.jpg](https://crossoverjie.top/uploads/weixinchat.jpg)
+
+### Features
 
 - [x] High performance.
 - [x] No deadlock.
@@ -18,10 +29,10 @@ This is a simple distributed lock based on Redis.
 - [x] blocking lock.
 
 
-## Quick start
+### Quick start
 
 
-### How to use?
+#### How to use?
 
 maven dependency:
 
@@ -29,7 +40,7 @@ maven dependency:
 <dependency>
     <groupId>top.crossoverjie.opensource</groupId>
     <artifactId>distributed-redis-tool</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -91,8 +102,3 @@ redisLock.lock(String key, String request,int blockTime);
 
 ```
 
-## Contact
-
-Mail: crossoverJie@gmail.com
-
-![weixinchat.jpg](https://crossoverjie.top/uploads/weixinchat.jpg)
