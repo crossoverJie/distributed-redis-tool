@@ -37,7 +37,7 @@ public class RedisLimit {
 
     /**
      * limit traffic
-     * @return
+     * @return if true
      */
     public boolean limit() {
         String key = String.valueOf(System.currentTimeMillis() / 1000);
