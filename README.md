@@ -68,7 +68,10 @@ public class RedisLockConfig {
         RedisLock redisLock = new RedisLock() ;
         HostAndPort hostAndPort = new HostAndPort("127.0.0.1",7000) ;
         JedisCluster jedisCluster = new JedisCluster(hostAndPort) ;
-        redisLock.setJedisCluster(jedisCluster) ;
+        RedisLock redisLock = new RedisLock.Builder(jedisCluster)
+                .lockPrefix("lock_test")
+                .sleepTime(100)
+                .build();
         return redisLock ;
     }
 
