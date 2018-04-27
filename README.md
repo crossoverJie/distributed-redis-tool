@@ -173,6 +173,12 @@ public class RedisLimitConfig {
 }
 ```
 
+Scan `com.crossoverjie.distributed.intercept` package.
+
+```java
+@ComponentScan(value = "com.crossoverjie.distributed.intercept")
+```
+
 #### Native API:
 
 ```java
