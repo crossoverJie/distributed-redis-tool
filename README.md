@@ -65,6 +65,7 @@ public class RedisLockConfig {
 
     @Bean
     public RedisLock build(){
+        //Need to get Redis connection 
         RedisLock redisLock = new RedisLock() ;
         HostAndPort hostAndPort = new HostAndPort("127.0.0.1",7000) ;
         JedisCluster jedisCluster = new JedisCluster(hostAndPort) ;
@@ -72,6 +73,7 @@ public class RedisLockConfig {
                 .lockPrefix("lock_test")
                 .sleepTime(100)
                 .build();
+                
         return redisLock ;
     }
 
