@@ -67,7 +67,7 @@ public class RedisLockConfig {
 
 ```
 
-Non-blocking lock like this:
+#### Non-blocking lock:
 
 ```java
     @Autowired
@@ -94,17 +94,18 @@ Non-blocking lock like this:
 
 ```
 
-Other apis:
-
+#### Blocking lock
 
 ```java
-//blocking lock
 redisLock.lock(String key, String request);
-
-//blocking lock, costom block time
-redisLock.lock(String key, String request,int blockTime);
-
 ```
+
+#### Blocking lock, Custom block time
+
+```java
+redisLock.lock(String key, String request,int blockTime);
+```
+
 
 ----
 ### Features
@@ -113,6 +114,7 @@ redisLock.lock(String key, String request,int blockTime);
 - [x] native API.
 - [x] Annation API.
 - [x] Support Redis cluster, single.
+- [x] Suppport Spring4.x+
 
 
 ### Quick start
