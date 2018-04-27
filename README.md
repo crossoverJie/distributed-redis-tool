@@ -20,6 +20,7 @@ Mail: crossoverJie@gmail.com
 
 ![weixinchat.jpg](https://crossoverjie.top/uploads/weixinchat.jpg)
 
+
 ### Features
 
 - [x] High performance.
@@ -32,7 +33,6 @@ Mail: crossoverJie@gmail.com
 ### Quick start
 
 
-#### How to use?
 
 maven dependency:
 
@@ -44,7 +44,7 @@ maven dependency:
 </dependency>
 ```
 
-configure bean:
+Set bean:
 
 ```java
 @Configuration
@@ -101,4 +101,100 @@ redisLock.lock(String key, String request);
 redisLock.lock(String key, String request,int blockTime);
 
 ```
+
+----
+### Features
+
+- [x] High performance.
+- [x] native API.
+- [x] Annation API.
+- [x] Support Redis cluster, single.
+
+
+### Quick start
+
+maven dependency:
+
+```xml
+<dependency>
+    <groupId>top.crossoverjie.opensource</groupId>
+    <artifactId>distributed-redis-tool</artifactId>
+    <version>1.0.2</version>
+</dependency>
+```
+
+set bean:
+
+```java
+@Configuration
+public class RedisLimitConfig {
+
+
+    @Value("${redis.limit}")
+    private int limit;
+
+
+    @Autowired
+    private JedisConnectionFactory jedisConnectionFactory;
+
+    @Bean
+    public RedisLimit build() {
+        //Need to get Redis connection 
+        RedisClusterConnection clusterConnection = jedisConnectionFactory.getClusterConnection();
+        JedisCluster jedisCluster = (JedisCluster) clusterConnection.getNativeConnection();
+        RedisLimit redisLimit = new RedisLimit.Builder<>(jedisCluster)
+                .limit(limit)
+                .build();
+
+        return redisLimit;
+    }
+}
+```
+
+#### Native API:
+
+```java
+  	
+    boolean limit = redisLimit.limit();
+    if (!limit){
+        res.setCode(StatusEnum.REQUEST_LIMIT.getCode());
+        res.setMessage(StatusEnum.REQUEST_LIMIT.getMessage());
+        return res ;
+    }
+```
+
+Other apis:
+
+#### @ControllerLimit
+
+```java
+    @ControllerLimit
+    public BaseResponse<OrderNoResVO> getOrderNoLimit(@RequestBody OrderNoReqVO orderNoReq) {
+        BaseResponse<OrderNoResVO> res = new BaseResponse();
+        res.setReqNo(orderNoReq.getReqNo());
+        if (null == orderNoReq.getAppId()){
+            throw new SBCException(StatusEnum.FAIL);
+        }
+        OrderNoResVO orderNoRes = new OrderNoResVO() ;
+        orderNoRes.setOrderId(DateUtil.getLongTime());
+        res.setCode(StatusEnum.SUCCESS.getCode());
+        res.setMessage(StatusEnum.SUCCESS.getMessage());
+        res.setDataBody(orderNoRes);
+        return res ;
+    }
+```
+
+Used for `@RequestMapping`.
+
+#### @CommonLimit
+
+```java
+@CommonLimit
+public void anyMethod(){}
+```
+
+It can be used for any Methods.
+
+
+
 
