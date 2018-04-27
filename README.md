@@ -10,13 +10,15 @@ This is a simple distributed tools based on Redis.
 
 ## [Distributed lock](https://github.com/crossoverJie/distributed-redis-tool#features)
 
+* [Features](https://github.com/crossoverJie/distributed-redis-tool#features)
 * [Non-blocking lock](https://github.com/crossoverJie/distributed-redis-tool#non-blocking-lock)
 * [Blocking lock API](https://github.com/crossoverJie/distributed-redis-tool#blocking-lock)
 * [Blocking lock, Custom block time](https://github.com/crossoverJie/distributed-redis-tool#blocking-lock-custom-block-time)
 
 
-## [Distributed limiting](https://github.com/crossoverJie/distributed-redis-tool#features-1)
+## Distributed limiting
 
+* [Features](https://github.com/crossoverJie/distributed-redis-tool#features-1)
 * [Native API](https://github.com/crossoverJie/distributed-redis-tool#native-api)
 * [@ControllerLimit API](https://github.com/crossoverJie/distributed-redis-tool#controllerlimit)
 * [@CommonLimit API](https://github.com/crossoverJie/distributed-redis-tool#controllerlimit)
