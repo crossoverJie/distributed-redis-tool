@@ -83,9 +83,5 @@ public class RedisLimitTest {
         }
     }
 
-    //@Test
-    public void limit() {
-        boolean limit = redisLimit.limit();
-        System.out.println("limit=" + limit);
-    }
+
 }
