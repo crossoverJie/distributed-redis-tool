@@ -1,14 +1,12 @@
-package com.crossoverjie.distributed.lock.redis;
+package com.crossoverjie.distributed.lock;
 
 import junit.framework.Assert;
-import org.easymock.internal.RuntimeExceptionWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.ShardedJedis;
 
 /**
@@ -20,7 +18,6 @@ import redis.clients.jedis.ShardedJedis;
  */
 public class WrongInstanceTest {
 
-    @InjectMocks
     private RedisLock redisLock;
 
     @Mock
@@ -29,7 +26,11 @@ public class WrongInstanceTest {
     @Before
     public void setBefore() {
         MockitoAnnotations.initMocks(this);
-        redisLock.setJedis(jedis);
+        redisLock = new RedisLock.Builder(jedis)
+                .lockPrefix("lock_test")
+                .sleepTime(100)
+                .build();
+
 
     }
 

@@ -1,4 +1,4 @@
-package com.crossoverjie.distributed.lock.redis;
+package com.crossoverjie.distributed.lock;
 
 import junit.framework.Assert;
 import org.junit.Before;
@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
 
 /**
  * Function:
@@ -19,7 +18,6 @@ import redis.clients.jedis.JedisCluster;
  */
 public class RedisTest {
 
-    @InjectMocks
     private RedisLock redisLock;
 
     @Mock
@@ -28,7 +26,10 @@ public class RedisTest {
     @Before
     public void setBefore() {
         MockitoAnnotations.initMocks(this);
-        redisLock.setJedis(jedis);
+        redisLock = new RedisLock.Builder(jedis)
+                .lockPrefix("lock_test")
+                .build();
+
 
     }
 
