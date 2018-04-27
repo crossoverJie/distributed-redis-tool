@@ -11,7 +11,11 @@ This is a simple distributed tools based on Redis.
 ## [Distributed lock](https://github.com/crossoverJie/distributed-redis-tool#features)
 
 
-## Distributed limiting
+## [Distributed limiting](https://github.com/crossoverJie/distributed-redis-tool#features-1)
+
+* [Native API](https://github.com/crossoverJie/distributed-redis-tool#native-api)
+* [@ControllerLimit API](https://github.com/crossoverJie/distributed-redis-tool#controllerlimit)
+* [@CommonLimit API](https://github.com/crossoverJie/distributed-redis-tool#controllerlimit)
 
 
 ## Contact
