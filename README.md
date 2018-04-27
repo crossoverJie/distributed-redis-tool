@@ -145,7 +145,7 @@ maven dependency:
 </dependency>
 ```
 
-Set bean:
+1. Set bean:
 
 ```java
 @Configuration
@@ -173,7 +173,7 @@ public class RedisLimitConfig {
 }
 ```
 
-Scan `com.crossoverjie.distributed.intercept` package.
+2. Scan `com.crossoverjie.distributed.intercept` package.
 
 ```java
 @ComponentScan(value = "com.crossoverjie.distributed.intercept")
