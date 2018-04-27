@@ -8,7 +8,7 @@
 This is a simple distributed tools based on Redis.
 
 
-## [Distributed lock](https://github.com/crossoverJie/distributed-redis-tool#features)
+## Distributed lock
 
 * [Features](https://github.com/crossoverJie/distributed-redis-tool#features)
 * [Non-blocking lock](https://github.com/crossoverJie/distributed-redis-tool#non-blocking-lock)
