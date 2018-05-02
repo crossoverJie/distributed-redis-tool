@@ -61,8 +61,8 @@ public class WebIntercept extends WebMvcConfigurerAdapter {
 
                 boolean limit = redisLimit.limit();
                 if (!limit) {
-                    logger.warn("request has bean limit");
-                    response.sendError(500, "request limit");
+                    logger.warn("request has bean limited");
+                    response.sendError(500, "request limited");
                     return false;
                 }
 

@@ -42,8 +42,8 @@ public class CommonAspect {
 
         boolean limit = redisLimit.limit();
         if (!limit) {
-            logger.warn("request has bean limit");
-            throw new RuntimeException("request has bean limit") ;
+            logger.warn("request has bean limited");
+            throw new RuntimeException("request has bean limited") ;
         }
 
     }
