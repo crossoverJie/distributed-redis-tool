@@ -31,10 +31,6 @@ public class SpringMVCIntercept extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-
-        logger.info("request interceptor");
-
-
         if (redisLimit == null) {
             throw new NullPointerException("redisLimit is null");
         }
