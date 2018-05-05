@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
@@ -23,7 +22,7 @@ public class RedisLimitJunitTest {
     private RedisLimit redisLimit;
 
     @Mock
-    private JedisConnectionFactory jedisCluster;
+    private JedisCluster jedisCluster;
 
     @Before
     public void setBefore() {
@@ -39,24 +38,23 @@ public class RedisLimitJunitTest {
     @Test
     public void limit() {
 
-        JedisCluster jedis = (JedisCluster) jedisCluster.getClusterConnection().getNativeConnection();
-        Mockito.when((jedis.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList()))).thenReturn(0L) ;
+        Mockito.when(jedisCluster.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(0L) ;
 
         boolean limit = redisLimit.limit();
         System.out.println("limit=" + limit);
-        Mockito.verify(jedis).eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList());
+        Mockito.verify(jedisCluster).eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList());
         Assert.assertFalse(limit);
 
     }
 
     @Test
     public void limitTrue() {
-        JedisCluster jedis = (JedisCluster) jedisCluster.getClusterConnection().getNativeConnection();
-        Mockito.when(jedis.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(1L) ;
+
+        Mockito.when(jedisCluster.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(1L) ;
 
         boolean limit = redisLimit.limit();
         System.out.println("limit=" + limit);
-        Mockito.verify(jedis).eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList());
+        Mockito.verify(jedisCluster).eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList());
         Assert.assertTrue(limit);
 
     }
