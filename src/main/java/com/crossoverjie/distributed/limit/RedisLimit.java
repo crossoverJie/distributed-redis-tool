@@ -3,6 +3,7 @@ package com.crossoverjie.distributed.limit;
 import com.crossoverjie.distributed.util.ScriptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.redis.connection.RedisClusterConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.Jedis;
@@ -44,15 +45,19 @@ public class RedisLimit {
     public boolean limit() {
         String key = String.valueOf(System.currentTimeMillis() / 1000);
         Object result = null;
-        RedisClusterConnection clusterConnection = jedis.getClusterConnection();
-        if (clusterConnection != null){
+        try {
+            RedisClusterConnection clusterConnection = jedis.getClusterConnection();
             JedisCluster jedisCluster = (JedisCluster) clusterConnection.getNativeConnection();
             result = jedisCluster.eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
-        }else {
-            Jedis jedis = (Jedis) clusterConnection.getNativeConnection();
-            result = jedis.eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
-
+            if (FAIL_CODE != (Long) result) {
+                return true;
+            } else {
+                return false;
+            }
+        }catch (InvalidDataAccessApiUsageException e){
         }
+        Jedis jedisConn = (Jedis)jedis.getConnection().getNativeConnection() ;
+        result = jedisConn.eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
 
         if (FAIL_CODE != (Long) result) {
             return true;
