@@ -46,6 +46,8 @@ public class WebIntercept extends WebMvcConfigurerAdapter {
                                  Object handler) throws Exception {
 
 
+            logger.debug("request interceptor");
+
             if (redisLimit == null) {
                 throw new NullPointerException("redisLimit is null");
             }
