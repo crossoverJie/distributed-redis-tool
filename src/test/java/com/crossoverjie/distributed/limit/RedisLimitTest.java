@@ -48,9 +48,9 @@ public class RedisLimitTest {
         HostAndPort hostAndPort = new HostAndPort("10.19.13.51", 7000);
         JedisCluster jedisCluster = new JedisCluster(hostAndPort);
 
-        redisLimit = new RedisLimit.Builder<>(jedisCluster)
-                .limit(100)
-                .build();
+        //redisLimit = new RedisLimit.Builder(jedisCluster)
+        //        .limit(100)
+        //        .build();
 
     }
 

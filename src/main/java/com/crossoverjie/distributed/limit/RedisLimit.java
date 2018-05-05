@@ -3,6 +3,8 @@ package com.crossoverjie.distributed.limit;
 import com.crossoverjie.distributed.util.ScriptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.RedisClusterConnection;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisCommands;
@@ -18,7 +20,7 @@ import java.util.Collections;
  */
 public class RedisLimit {
 
-    private JedisCommands jedis;
+    private JedisConnectionFactory jedis;
     private int limit = 200;
 
     private static final int FAIL_CODE = 0;
@@ -42,13 +44,14 @@ public class RedisLimit {
     public boolean limit() {
         String key = String.valueOf(System.currentTimeMillis() / 1000);
         Object result = null;
-        if (jedis instanceof Jedis) {
-            result = ((Jedis) this.jedis).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
-        } else if (jedis instanceof JedisCluster) {
-            result = ((JedisCluster) this.jedis).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
-        } else {
-            //throw new RuntimeException("instance is error") ;
-            return false;
+        RedisClusterConnection clusterConnection = jedis.getClusterConnection();
+        if (clusterConnection != null){
+            JedisCluster jedisCluster = (JedisCluster) clusterConnection.getNativeConnection();
+            result = jedisCluster.eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
+        }else {
+            Jedis jedis = (Jedis) clusterConnection.getNativeConnection();
+            result = jedis.eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
+
         }
 
         if (FAIL_CODE != (Long) result) {
@@ -72,12 +75,12 @@ public class RedisLimit {
      * @param <T>
      */
     public static class Builder<T extends JedisCommands>{
-        private T jedis = null ;
+        private JedisConnectionFactory jedis = null ;
 
         private int limit = 200;
 
 
-        public Builder(T jedis){
+        public Builder(JedisConnectionFactory jedis){
             this.jedis = jedis ;
         }
 
