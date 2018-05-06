@@ -9,6 +9,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 
+import java.io.IOException;
 import java.util.Collections;
 
 /**
@@ -43,7 +44,7 @@ public class RedisLimit {
      * limit traffic
      * @return if true
      */
-    public boolean limit() {
+    public boolean limit() throws IOException {
 
         Object connection ;
         if (type == RedisToolsConstant.SINGLE){
@@ -58,8 +59,10 @@ public class RedisLimit {
         String key = String.valueOf(System.currentTimeMillis() / 1000);
         if (connection instanceof Jedis){
             result = ((Jedis)connection).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
+            ((Jedis) connection).close();
         }else {
             result = ((JedisCluster) connection).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
+            ((JedisCluster) connection).close();
         }
 
 
