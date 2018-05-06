@@ -81,7 +81,6 @@ public class RedisLimit {
 
     /**
      *  the builder
-     * @param <T>
      */
     public static class Builder{
         private JedisConnectionFactory jedisConnectionFactory = null ;
