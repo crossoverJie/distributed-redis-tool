@@ -1,7 +1,10 @@
 package com.crossoverjie.distributed.limit;
 
 import com.crossoverjie.distributed.constant.RedisToolsConstant;
+import com.crossoverjie.distributed.intercept.SpringMVCIntercept;
 import com.crossoverjie.distributed.util.ScriptUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisClusterConnection;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -20,6 +23,9 @@ import java.util.Collections;
  * @since JDK 1.8
  */
 public class RedisLimit {
+
+    private static Logger logger = LoggerFactory.getLogger(RedisLimit.class);
+
 
     private JedisConnectionFactory jedisConnectionFactory;
     private int type ;
@@ -44,7 +50,7 @@ public class RedisLimit {
      * limit traffic
      * @return if true
      */
-    public boolean limit() throws IOException {
+    public boolean limit() {
 
         Object connection ;
         if (type == RedisToolsConstant.SINGLE){
@@ -62,9 +68,12 @@ public class RedisLimit {
             ((Jedis) connection).close();
         }else {
             result = ((JedisCluster) connection).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
-            ((JedisCluster) connection).close();
+            try {
+                ((JedisCluster) connection).close();
+            } catch (IOException e) {
+                logger.error("IOException",e);
+            }
         }
-
 
         if (FAIL_CODE != (Long) result) {
             return true;

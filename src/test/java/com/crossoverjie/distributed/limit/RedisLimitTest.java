@@ -60,7 +60,7 @@ public class RedisLimitTest {
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration() ;
         redisClusterConfiguration.addClusterNode(new RedisNode("10.19.13.51",7000));
 
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration,config) ;
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(config) ;
         jedisConnectionFactory.setHostName("47.98.194.60");
         jedisConnectionFactory.setPort(6379);
         jedisConnectionFactory.setPassword("");
@@ -72,7 +72,7 @@ public class RedisLimitTest {
         Jedis jedis = new Jedis("47.98.194.60", 6379);
         //JedisCluster jedisCluster = new JedisCluster(hostAndPort);
 
-        redisLimit = new RedisLimit.Builder(jedisConnectionFactory, RedisToolsConstant.CLUSTER)
+        redisLimit = new RedisLimit.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
                 .limit(5)
                 .build();
 
