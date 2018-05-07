@@ -52,15 +52,19 @@ public class RedisLimit {
      */
     public boolean limit() {
 
-        Object connection ;
-        if (type == RedisToolsConstant.SINGLE){
-            RedisConnection redisConnection = jedisConnectionFactory.getConnection();
-            connection = redisConnection.getNativeConnection();
-        }else {
-            RedisClusterConnection clusterConnection = jedisConnectionFactory.getClusterConnection();
-            connection = clusterConnection.getNativeConnection() ;
-        }
+        //get connection
+        Object connection = getConnection();
 
+        Object result = limitRequest(connection);
+
+        if (FAIL_CODE != (Long) result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private Object limitRequest(Object connection) {
         Object result = null;
         String key = String.valueOf(System.currentTimeMillis() / 1000);
         if (connection instanceof Jedis){
@@ -74,12 +78,19 @@ public class RedisLimit {
                 logger.error("IOException",e);
             }
         }
+        return result;
+    }
 
-        if (FAIL_CODE != (Long) result) {
-            return true;
-        } else {
-            return false;
+    private Object getConnection() {
+        Object connection ;
+        if (type == RedisToolsConstant.SINGLE){
+            RedisConnection redisConnection = jedisConnectionFactory.getConnection();
+            connection = redisConnection.getNativeConnection();
+        }else {
+            RedisClusterConnection clusterConnection = jedisConnectionFactory.getClusterConnection();
+            connection = clusterConnection.getNativeConnection() ;
         }
+        return connection;
     }
 
 
