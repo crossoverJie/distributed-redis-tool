@@ -33,7 +33,7 @@ Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_
 
 - Upgrade API.
 - Add Anation.
-- :zap: Improve performance.
+- Improve performance :zap: .
 
 
 ## Contact
