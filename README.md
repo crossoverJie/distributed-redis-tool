@@ -29,6 +29,11 @@ Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_
 
 ## ChangeLogs
 
+### v1.0.3
+
+- Upgrade API.
+- Add Anation.
+- :zap: Improve performance.
 
 
 ## Contact
@@ -60,7 +65,7 @@ maven dependency:
 <dependency>
     <groupId>top.crossoverjie.opensource</groupId>
     <artifactId>distributed-redis-tool</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -148,7 +153,7 @@ maven dependency:
 <dependency>
     <groupId>top.crossoverjie.opensource</groupId>
     <artifactId>distributed-redis-tool</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
