@@ -26,6 +26,11 @@ This is a simple distributed tools based on Redis.
 
 Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_SKgIgH&q=Distributed+site%3AcrossoverJie.top&oq=Distributed+site%3AcrossoverJie.top&gs_l=psy-ab.3...9719.30867.0.31049.47.33.7.0.0.0.519.5126.4-11j1.12.0....0...1.1j4.64.psy-ab..31.0.0....0.ltPqVipC_iE) for more information.
 
+
+## ChangeLogs
+
+
+
 ## Contact
 
 Mail: crossoverJie@gmail.com
@@ -152,24 +157,16 @@ maven dependency:
 ```java
 @Configuration
 public class RedisLimitConfig {
-
-
+    private Logger logger = LoggerFactory.getLogger(RedisLimitConfig.class);
     @Value("${redis.limit}")
     private int limit;
-
-
     @Autowired
     private JedisConnectionFactory jedisConnectionFactory;
-
     @Bean
     public RedisLimit build() {
-        //Need to get Redis connection 
-        RedisClusterConnection clusterConnection = jedisConnectionFactory.getClusterConnection();
-        JedisCluster jedisCluster = (JedisCluster) clusterConnection.getNativeConnection();
-        RedisLimit redisLimit = new RedisLimit.Builder<>(jedisCluster)
+        RedisLimit redisLimit = new RedisLimit.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
                 .limit(limit)
                 .build();
-
         return redisLimit;
     }
 }
@@ -215,6 +212,38 @@ Other apis:
 ```
 
 Used for `@RequestMapping`.
+
+
+#### @SpringControllerLimit
+
+If you are using native Spring:
+
+```java
+    @SpringControllerLimit(errorCode = 200,errorMsg = "request has limited")
+    @RequestMapping("/createOptimisticLimitOrderByRedis/{sid}")
+    @ResponseBody
+    public String createOptimisticLimitOrderByRedis(@PathVariable int sid) {
+        logger.info("sid=[{}]", sid);
+        int id = 0;
+        try {
+            id = orderService.createOptimisticOrderUseRedis(sid);
+        } catch (Exception e) {
+            logger.error("Exception",e);
+        }
+        return String.valueOf(id);
+    }
+```
+
+Spring xml:
+
+```xml
+   <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/> 
+            <bean class="com.crossoverjie.distributed.intercept.SpringMVCIntercept"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+```
 
 #### @CommonLimit
 
