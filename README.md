@@ -27,7 +27,7 @@ This is a simple distributed tools based on Redis.
 Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_SKgIgH&q=Distributed+site%3AcrossoverJie.top&oq=Distributed+site%3AcrossoverJie.top&gs_l=psy-ab.3...9719.30867.0.31049.47.33.7.0.0.0.519.5126.4-11j1.12.0....0...1.1j4.64.psy-ab..31.0.0....0.ltPqVipC_iE) for more information.
 
 
-## ChangeLogs
+## ChangeLog
 
 ### v1.0.3
 
