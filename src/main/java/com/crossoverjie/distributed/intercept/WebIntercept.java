@@ -45,7 +45,6 @@ public class WebIntercept extends WebMvcConfigurerAdapter {
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                                  Object handler) throws Exception {
 
-
             if (redisLimit == null) {
                 throw new NullPointerException("redisLimit is null");
             }

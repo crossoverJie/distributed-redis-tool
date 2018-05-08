@@ -14,7 +14,7 @@
     <groupId>top.crossoverjie.opensource</groupId>
     <artifactId>distributed-redis-tool</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <name>distributed-tools</name>
     <description>This is a simple distributed tools based on Redis.</description>
     <inceptionYear>2018</inceptionYear>
@@ -54,6 +54,11 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.8.6.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

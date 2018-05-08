@@ -1,12 +1,18 @@
 package com.crossoverjie.distributed.limit;
 
+import com.crossoverjie.distributed.constant.RedisToolsConstant;
+import com.crossoverjie.distributed.intercept.SpringMVCIntercept;
 import com.crossoverjie.distributed.util.ScriptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.RedisClusterConnection;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisCommands;
+import redis.clients.jedis.JedisPool;
 
+import java.io.IOException;
 import java.util.Collections;
 
 /**
@@ -18,7 +24,11 @@ import java.util.Collections;
  */
 public class RedisLimit {
 
-    private JedisCommands jedis;
+    private static Logger logger = LoggerFactory.getLogger(RedisLimit.class);
+
+
+    private JedisConnectionFactory jedisConnectionFactory;
+    private int type ;
     private int limit = 200;
 
     private static final int FAIL_CODE = 0;
@@ -30,7 +40,8 @@ public class RedisLimit {
 
     private RedisLimit(Builder builder) {
         this.limit = builder.limit ;
-        this.jedis = builder.jedis ;
+        this.jedisConnectionFactory = builder.jedisConnectionFactory;
+        this.type = builder.type ;
         buildScript();
     }
 
@@ -40,22 +51,46 @@ public class RedisLimit {
      * @return if true
      */
     public boolean limit() {
-        String key = String.valueOf(System.currentTimeMillis() / 1000);
-        Object result = null;
-        if (jedis instanceof Jedis) {
-            result = ((Jedis) this.jedis).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
-        } else if (jedis instanceof JedisCluster) {
-            result = ((JedisCluster) this.jedis).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
-        } else {
-            //throw new RuntimeException("instance is error") ;
-            return false;
-        }
+
+        //get connection
+        Object connection = getConnection();
+
+        Object result = limitRequest(connection);
 
         if (FAIL_CODE != (Long) result) {
             return true;
         } else {
             return false;
         }
+    }
+
+    private Object limitRequest(Object connection) {
+        Object result = null;
+        String key = String.valueOf(System.currentTimeMillis() / 1000);
+        if (connection instanceof Jedis){
+            result = ((Jedis)connection).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
+            ((Jedis) connection).close();
+        }else {
+            result = ((JedisCluster) connection).eval(script, Collections.singletonList(key), Collections.singletonList(String.valueOf(limit)));
+            try {
+                ((JedisCluster) connection).close();
+            } catch (IOException e) {
+                logger.error("IOException",e);
+            }
+        }
+        return result;
+    }
+
+    private Object getConnection() {
+        Object connection ;
+        if (type == RedisToolsConstant.SINGLE){
+            RedisConnection redisConnection = jedisConnectionFactory.getConnection();
+            connection = redisConnection.getNativeConnection();
+        }else {
+            RedisClusterConnection clusterConnection = jedisConnectionFactory.getClusterConnection();
+            connection = clusterConnection.getNativeConnection() ;
+        }
+        return connection;
     }
 
 
@@ -69,16 +104,17 @@ public class RedisLimit {
 
     /**
      *  the builder
-     * @param <T>
      */
-    public static class Builder<T extends JedisCommands>{
-        private T jedis = null ;
+    public static class Builder{
+        private JedisConnectionFactory jedisConnectionFactory = null ;
 
         private int limit = 200;
+        private int type ;
 
 
-        public Builder(T jedis){
-            this.jedis = jedis ;
+        public Builder(JedisConnectionFactory jedisConnectionFactory,int type){
+            this.jedisConnectionFactory = jedisConnectionFactory;
+            this.type = type ;
         }
 
         public Builder limit(int limit){
