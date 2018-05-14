@@ -1,0 +1,17 @@
+*/target
+*/.idea'.idea''.idea'
+# Others
+.idea/
+*.iml
+
+.gradle
+/.idea/workspace.xml
+.DS_Store
+/build
+/capture
+
+#local
+*/out/
+*/resources/apiclient_cert.p12
+*/resources/apiclient_cert.p12
+logs/

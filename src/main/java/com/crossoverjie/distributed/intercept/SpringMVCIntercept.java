@@ -17,16 +17,22 @@ import java.io.IOException;
  * Function:
  *
  * @author crossoverJie
- *         Date: 05/05/2018 20:38
+ * Date: 05/05/2018 20:38
  * @since JDK 1.8
  */
 
 public class SpringMVCIntercept extends HandlerInterceptorAdapter {
 
+
+    private RedisLimit redisLimit;
+
     private static Logger logger = LoggerFactory.getLogger(SpringMVCIntercept.class);
 
-    @Autowired
-    private RedisLimit redisLimit;
+    public SpringMVCIntercept(RedisLimit redisLimit) {
+        this.redisLimit = redisLimit;
+        System.out.println("SpringMVCIntercept初始化");
+    }
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
