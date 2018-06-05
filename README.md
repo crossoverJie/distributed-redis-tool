@@ -42,7 +42,7 @@ Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_
 
 Mail: crossoverJie@gmail.com
 
-![weixinchat.jpg](https://crossoverjie.top/uploads/weixinchat.jpg)
+![](https://ws1.sinaimg.cn/large/006tKfTcly1frz6eaf3s4j308c0au0ss.jpg)
 
 
 
