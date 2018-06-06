@@ -81,6 +81,10 @@ public class RedisLimit {
         return result;
     }
 
+    /**
+     * get Redis connection
+     * @return
+     */
     private Object getConnection() {
         Object connection ;
         if (type == RedisToolsConstant.SINGLE){
