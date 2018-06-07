@@ -56,10 +56,10 @@ public class RedisLockTest {
         config.setTestOnBorrow(true);
         config.setTestOnReturn(true);
 
-        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration() ;
-        redisClusterConfiguration.addClusterNode(new RedisNode("10.19.13.51",7000));
+        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
+        redisClusterConfiguration.addClusterNode(new RedisNode("10.19.13.51", 7000));
 
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(config) ;
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(config);
         //JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration) ;
         jedisConnectionFactory.setHostName("47.98.194.60");
         jedisConnectionFactory.setPort(6379);
@@ -69,9 +69,9 @@ public class RedisLockTest {
         //jedisConnectionFactory.setShardInfo(new JedisShardInfo("47.98.194.60", 6379));
         //JedisCluster jedisCluster = new JedisCluster(hostAndPort);
 
-        HostAndPort hostAndPort = new HostAndPort("10.19.13.51",7000) ;
-        JedisCluster jedisCluster = new JedisCluster(hostAndPort) ;
-        redisLock = new RedisLock.Builder(jedisConnectionFactory,RedisToolsConstant.SINGLE)
+        HostAndPort hostAndPort = new HostAndPort("10.19.13.51", 7000);
+        JedisCluster jedisCluster = new JedisCluster(hostAndPort);
+        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
                 .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
@@ -97,7 +97,7 @@ public class RedisLockTest {
 
         @Override
         public void run() {
-            boolean limit = redisLock.tryLock("abc","12345");
+            boolean limit = redisLock.tryLock("abc", "12345");
             if (limit) {
                 logger.info("加锁成功");
             } else {
