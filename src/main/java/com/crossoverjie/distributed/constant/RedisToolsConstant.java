@@ -1,7 +1,7 @@
 package com.crossoverjie.distributed.constant;
 
 /**
- * Function:
+ * Function: Redis Cluster or Single Redis
  *
  * @author crossoverJie
  *         Date: 06/05/2018 01:03
