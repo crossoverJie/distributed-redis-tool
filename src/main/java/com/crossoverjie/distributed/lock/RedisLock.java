@@ -35,10 +35,7 @@ public class RedisLock {
 
     private String lockPrefix;
 
-
     private int sleepTime;
-
-
 
     private JedisConnectionFactory jedisConnectionFactory;
     private int type ;

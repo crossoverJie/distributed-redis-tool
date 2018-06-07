@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 /**
- * Function:
+ * Function: limit util
  *
  * @author crossoverJie
  *         Date: 22/04/2018 15:54
