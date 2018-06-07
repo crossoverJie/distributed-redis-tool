@@ -1,5 +1,6 @@
 package com.crossoverjie.distributed.lock;
 
+import com.crossoverjie.distributed.constant.RedisToolsConstant;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,16 +8,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.redis.connection.RedisClusterConnection;
+import org.springframework.data.redis.connection.jedis.JedisClusterConnection;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.JedisCluster;
 
 
 import java.util.UUID;
 
-
 public class RedisClusterLockTest {
 
 
     private RedisLock redisLock;
+
+    @Mock
+    private JedisConnectionFactory jedisConnectionFactory ;
 
     @Mock
     private JedisCluster jedisCluster;
@@ -25,18 +31,21 @@ public class RedisClusterLockTest {
     public void setBefore() {
         MockitoAnnotations.initMocks(this);
 
-        redisLock = new RedisLock.Builder(jedisCluster)
-                .lockPrefix("lock_test")
+        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.CLUSTER)
+                .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
 
-        //redisLock = new RedisLock();
-        //HostAndPort hostAndPort = new HostAndPort("10.19.13.51", 7000);
-        //JedisCluster jedisCluster = new JedisCluster(hostAndPort);
+
+        RedisClusterConnection clusterConnection = new JedisClusterConnection(jedisCluster);
+        Mockito.when(jedisConnectionFactory.getClusterConnection()).thenReturn(clusterConnection);
+        jedisCluster = (JedisCluster)clusterConnection.getNativeConnection();
+
     }
 
     @Test
     public void tryLock() throws Exception {
+
         String key = "test";
         String request = UUID.randomUUID().toString();
         Mockito.when(jedisCluster.set(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),

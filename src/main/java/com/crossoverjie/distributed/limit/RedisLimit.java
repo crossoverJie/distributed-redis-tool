@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 /**
- * Function:
+ * Function: limit util
  *
  * @author crossoverJie
  *         Date: 22/04/2018 15:54
@@ -81,6 +81,10 @@ public class RedisLimit {
         return result;
     }
 
+    /**
+     * get Redis connection
+     * @return
+     */
     private Object getConnection() {
         Object connection ;
         if (type == RedisToolsConstant.SINGLE){
