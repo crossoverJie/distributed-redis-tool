@@ -33,8 +33,8 @@ Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_
 
 ### v1.0.4
 - Upgrade distributed lock API.
-- Support connection pool
-- Improve distributed lock performance :zap: .
+- Support connection pool.
+- Improve distributed lock performance :zap:.
 
 ### v1.0.3
 
