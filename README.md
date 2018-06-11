@@ -31,6 +31,11 @@ Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_
 
 ## ChangeLog
 
+### v1.0.4
+- Upgrade distributed lock API.
+- Support connection pool.
+- Improve distributed lock performance :zap:.
+
 ### v1.0.3
 
 - Upgrade API.
@@ -42,7 +47,7 @@ Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_
 
 Mail: crossoverJie@gmail.com
 
-![weixinchat.jpg](https://crossoverjie.top/uploads/weixinchat.jpg)
+![](https://ws1.sinaimg.cn/large/006tKfTcly1frz6eaf3s4j308c0au0ss.jpg)
 
 
 
@@ -55,6 +60,8 @@ Mail: crossoverJie@gmail.com
 - [x] Support Redis cluster, single.
 - [x] Non-blocking lock.
 - [x] blocking lock.
+- [x] Support connection pool.
+- [x] Suppport Spring4.x+.
 
 
 ### Quick start
@@ -67,7 +74,7 @@ maven dependency:
 <dependency>
     <groupId>top.crossoverjie.opensource</groupId>
     <artifactId>distributed-redis-tool</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -76,21 +83,21 @@ Set bean:
 ```java
 @Configuration
 public class RedisLockConfig {
-
+    private Logger logger = LoggerFactory.getLogger(RedisLockConfig.class);
+    
+    
+    @Autowired
+    private JedisConnectionFactory jedisConnectionFactory;
+    
     @Bean
-    public RedisLock build(){
-        //Need to get Redis connection 
-        RedisLock redisLock = new RedisLock() ;
-        HostAndPort hostAndPort = new HostAndPort("127.0.0.1",7000) ;
-        JedisCluster jedisCluster = new JedisCluster(hostAndPort) ;
-        RedisLock redisLock = new RedisLock.Builder(jedisCluster)
-                .lockPrefix("lock_test")
+    public RedisLock build() {
+        RedisLock redisLock = new RedisLock.Builder(jedisConnectionFactory,RedisToolsConstant.SINGLE)
+                .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
-                
-        return redisLock ;
-    }
 
+        return redisLock;
+    }
 }
 
 ```
@@ -155,7 +162,7 @@ maven dependency:
 <dependency>
     <groupId>top.crossoverjie.opensource</groupId>
     <artifactId>distributed-redis-tool</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
@@ -165,10 +172,13 @@ maven dependency:
 @Configuration
 public class RedisLimitConfig {
     private Logger logger = LoggerFactory.getLogger(RedisLimitConfig.class);
+    
     @Value("${redis.limit}")
     private int limit;
+    
     @Autowired
     private JedisConnectionFactory jedisConnectionFactory;
+    
     @Bean
     public RedisLimit build() {
         RedisLimit redisLimit = new RedisLimit.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
