@@ -59,7 +59,10 @@ public class RedisLockTest {
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
         redisClusterConfiguration.addClusterNode(new RedisNode("10.19.13.51", 7000));
 
+        //单机
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(config);
+
+        //集群
         //JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration) ;
         jedisConnectionFactory.setHostName("47.98.194.60");
         jedisConnectionFactory.setPort(6379);
