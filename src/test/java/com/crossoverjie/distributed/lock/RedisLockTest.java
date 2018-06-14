@@ -29,7 +29,7 @@ public class RedisLockTest {
         redisLockTest.init();
         initThread();
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 100; i++) {
             executorServicePool.execute(new Worker(i));
         }
 
@@ -50,8 +50,8 @@ public class RedisLockTest {
     private void init() {
 
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxIdle(10);
-        config.setMaxTotal(300);
+        config.setMaxIdle(50);
+        config.setMaxTotal(50);
         config.setMaxWaitMillis(10000);
         config.setTestOnBorrow(true);
         config.setTestOnReturn(true);
@@ -102,11 +102,12 @@ public class RedisLockTest {
         public void run() {
             boolean limit = redisLock.tryLock("abc", "12345");
             if (limit) {
-                logger.info("加锁成功");
+                logger.info("加锁成功=========");
             } else {
                 logger.info("加锁失败");
 
             }
+            redisLock.unlock("abc","12345") ;
         }
     }
 
