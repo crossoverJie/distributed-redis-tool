@@ -103,15 +103,15 @@ public class RealRedisLockTest {
         @Override
         public void run() {
             //测试非阻塞锁
-            boolean limit = redisLock.tryLock("abc", "12345");
-            if (limit) {
-                logger.info("加锁成功=========");
-                boolean unlock = redisLock.unlock("abc", "12345");
-                logger.info("解锁结果===[{}]",unlock);
-            } else {
-                logger.info("加锁失败");
-
-            }
+            //boolean limit = redisLock.tryLock("abc", "12345");
+            //if (limit) {
+            //    logger.info("加锁成功=========");
+            //    boolean unlock = redisLock.unlock("abc", "12345");
+            //    logger.info("解锁结果===[{}]",unlock);
+            //} else {
+            //    logger.info("加锁失败");
+            //
+            //}
 
             //测试非阻塞锁 + 超时时间
             //boolean limit = redisLock.tryLock("abc", "12345",1000);
@@ -127,13 +127,13 @@ public class RealRedisLockTest {
 
 
             //测试阻塞锁
-            //try {
-            //    redisLock.lock("abc", "12345");
-            //    logger.info("加锁成功=========");
-            //    redisLock.unlock("abc","12345") ;
-            //} catch (InterruptedException e) {
-            //    e.printStackTrace();
-            //}
+            try {
+                redisLock.lock("abc", "12345");
+                logger.info("加锁成功=========");
+                redisLock.unlock("abc","12345") ;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
 
