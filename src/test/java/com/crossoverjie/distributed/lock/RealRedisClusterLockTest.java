@@ -1,7 +1,6 @@
 package com.crossoverjie.distributed.lock;
 
 import com.crossoverjie.distributed.constant.RedisToolsConstant;
-import com.crossoverjie.distributed.limit.RedisLimit;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -9,13 +8,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import redis.clients.jedis.*;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.concurrent.*;
 
-public class RedisLockTest {
+/**
+ * real test by Redis cluster
+ */
+public class RealRedisClusterLockTest {
 
-    private static Logger logger = LoggerFactory.getLogger(RedisLockTest.class);
+    private static Logger logger = LoggerFactory.getLogger(RealRedisClusterLockTest.class);
     private static ExecutorService executorServicePool;
 
 
@@ -25,11 +30,11 @@ public class RedisLockTest {
 
 
     public static void main(String[] args) throws InterruptedException {
-        RedisLockTest redisLockTest = new RedisLockTest();
+        RealRedisClusterLockTest redisLockTest = new RealRedisClusterLockTest();
         redisLockTest.init();
         initThread();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             executorServicePool.execute(new Worker(i));
         }
 
@@ -50,8 +55,8 @@ public class RedisLockTest {
     private void init() {
 
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxIdle(50);
-        config.setMaxTotal(50);
+        config.setMaxIdle(100);
+        config.setMaxTotal(100);
         config.setMaxWaitMillis(10000);
         config.setTestOnBorrow(true);
         config.setTestOnReturn(true);
@@ -59,14 +64,9 @@ public class RedisLockTest {
         RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
         redisClusterConfiguration.addClusterNode(new RedisNode("10.19.13.51", 7000));
 
-        //单机
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(config);
-
         //集群
-        //JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration) ;
-        jedisConnectionFactory.setHostName("47.98.194.60");
-        jedisConnectionFactory.setPort(6379);
-        jedisConnectionFactory.setPassword("");
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration) ;
+
         jedisConnectionFactory.setTimeout(100000);
         jedisConnectionFactory.afterPropertiesSet();
         //jedisConnectionFactory.setShardInfo(new JedisShardInfo("47.98.194.60", 6379));
@@ -74,7 +74,7 @@ public class RedisLockTest {
 
         HostAndPort hostAndPort = new HostAndPort("10.19.13.51", 7000);
         JedisCluster jedisCluster = new JedisCluster(hostAndPort);
-        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
+        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.CLUSTER)
                 .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
@@ -100,14 +100,54 @@ public class RedisLockTest {
 
         @Override
         public void run() {
+            //测试非阻塞锁
             boolean limit = redisLock.tryLock("abc", "12345");
             if (limit) {
                 logger.info("加锁成功=========");
+                boolean unlock = redisLock.unlock("abc", "12345");
+                logger.info("解锁结果===[{}]",unlock);
             } else {
                 logger.info("加锁失败");
 
             }
-            redisLock.unlock("abc","12345") ;
+
+            //测试非阻塞锁 + 超时时间
+            //boolean limit = redisLock.tryLock("abc", "12345",1000);
+            //if (limit) {
+            //    logger.info("加锁成功=========");
+            //    boolean unlock = redisLock.unlock("abc", "12345");
+            //    logger.info("解锁结果===[{}]",unlock);
+            //} else {
+            //    logger.info("加锁失败");
+            //
+            //}
+
+
+            //测试阻塞锁
+            //try {
+            //    redisLock.lock("abc", "12345");
+            //    logger.info("加锁成功=========");
+            //} catch (InterruptedException e) {
+            //    e.printStackTrace();
+            //}
+            //redisLock.unlock("abc","12345") ;
+
+
+
+            //测试阻塞锁 + 阻塞时间
+            //try {
+            //    boolean limit = redisLock.lock("abc", "12345", 100);
+            //    if (limit) {
+            //        logger.info("加锁成功=========");
+            //        boolean unlock = redisLock.unlock("abc", "12345");
+            //        logger.info("解锁结果===[{}]",unlock);
+            //    } else {
+            //        logger.info("加锁失败");
+            //
+            //    }
+            //} catch (InterruptedException e) {
+            //    e.printStackTrace();
+            //}
         }
     }
 
