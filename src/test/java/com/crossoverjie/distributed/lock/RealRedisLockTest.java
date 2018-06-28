@@ -31,7 +31,7 @@ public class RealRedisLockTest {
         redisLockTest.init();
         initThread();
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 1; i++) {
             executorServicePool.execute(new Worker(i));
         }
 
@@ -106,21 +106,51 @@ public class RealRedisLockTest {
             //boolean limit = redisLock.tryLock("abc", "12345");
             //if (limit) {
             //    logger.info("加锁成功=========");
+            //    boolean unlock = redisLock.unlock("abc", "12345");
+            //    logger.info("解锁结果===[{}]",unlock);
             //} else {
             //    logger.info("加锁失败");
             //
             //}
-            //redisLock.unlock("abc","12345") ;
+
+            //测试非阻塞锁 + 超时时间
+            //boolean limit = redisLock.tryLock("abc", "12345",1000);
+            //if (limit) {
+            //    logger.info("加锁成功=========");
+            //    boolean unlock = redisLock.unlock("abc", "12345");
+            //    logger.info("解锁结果===[{}]",unlock);
+            //} else {
+            //    logger.info("加锁失败");
+            //
+            //}
+
 
 
             //测试阻塞锁
+            //try {
+            //    redisLock.lock("abc", "12345");
+            //    logger.info("加锁成功=========");
+            //} catch (InterruptedException e) {
+            //    e.printStackTrace();
+            //}
+            //redisLock.unlock("abc","12345") ;
+
+
+
+            //测试阻塞锁 + 阻塞时间
             try {
-                redisLock.lock("abc", "12345");
-                logger.info("加锁成功=========");
+                boolean limit = redisLock.lock("abc", "12345", 100);
+                if (limit) {
+                    logger.info("加锁成功=========");
+                    boolean unlock = redisLock.unlock("abc", "12345");
+                    logger.info("解锁结果===[{}]",unlock);
+                } else {
+                    logger.info("加锁失败");
+
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            redisLock.unlock("abc","12345") ;
         }
     }
 

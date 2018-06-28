@@ -10,7 +10,6 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
-import java.io.IOException;
 import java.util.Collections;
 
 /**
@@ -91,11 +90,7 @@ public class RedisLock {
             ((Jedis) connection).close();
         }else {
             result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
-            try {
-                ((JedisCluster) connection).close();
-            } catch (IOException e) {
-                logger.error("IOException",e);
-            }
+
         }
 
         if (LOCK_MSG.equals(result)) {
@@ -123,13 +118,6 @@ public class RedisLock {
                 }
             }else {
                 result = ((JedisCluster)connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
-                try {
-                    if (LOCK_MSG.equals(request)){
-                        ((JedisCluster) connection).close();
-                    }
-                } catch (IOException e) {
-                    logger.error("IOException",e);
-                }
             }
 
             if (LOCK_MSG.equals(result)) {
@@ -163,13 +151,6 @@ public class RedisLock {
                 }
             }else {
                 result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME) ;
-                try {
-                    if (LOCK_MSG.equals(request)){
-                        ((JedisCluster) connection).close();
-                    }
-                } catch (IOException e) {
-                    logger.error("IOException",e);
-                }
             }
             if (LOCK_MSG.equals(result)) {
                 return true;
@@ -201,11 +182,6 @@ public class RedisLock {
             ((Jedis) connection).close();
         }else {
             result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
-            try {
-                ((JedisCluster) connection).close();
-            } catch (IOException e) {
-                logger.error("IOException",e);
-            }
         }
 
         if (LOCK_MSG.equals(result)) {
@@ -235,11 +211,7 @@ public class RedisLock {
             ((Jedis) connection).close();
         } else if (connection instanceof JedisCluster) {
             result = ((JedisCluster) connection).eval(script, Collections.singletonList(lockPrefix + key), Collections.singletonList(request));
-            try {
-                ((JedisCluster) connection).close();
-            } catch (IOException e) {
-                logger.error("IOException",e);
-            }
+
         } else {
             //throw new RuntimeException("instance is error") ;
             return false;
