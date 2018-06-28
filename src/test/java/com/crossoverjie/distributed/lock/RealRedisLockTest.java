@@ -15,9 +15,9 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.concurrent.*;
 
-public class RedisLockTest {
+public class RealRedisLockTest {
 
-    private static Logger logger = LoggerFactory.getLogger(RedisLockTest.class);
+    private static Logger logger = LoggerFactory.getLogger(RealRedisLockTest.class);
     private static ExecutorService executorServicePool;
 
 
@@ -27,7 +27,7 @@ public class RedisLockTest {
 
 
     public static void main(String[] args) throws InterruptedException {
-        RedisLockTest redisLockTest = new RedisLockTest();
+        RealRedisLockTest redisLockTest = new RealRedisLockTest();
         redisLockTest.init();
         initThread();
 
