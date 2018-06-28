@@ -32,7 +32,7 @@ Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_
 ## ChangeLog
 
 ### v1.0.5
-- Fixed [#9](https://github.com/crossoverJie/distributed-redis-tool/issues/9)
+- Fixed [#9](https://github.com/crossoverJie/distributed-redis-tool/issues/9).
 - Optimization RedisCluster.
 
 ### v1.0.4
