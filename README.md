@@ -32,8 +32,8 @@ Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_
 ## ChangeLog
 
 ### v1.0.5
-- fixed [#9](https://github.com/crossoverJie/distributed-redis-tool/issues/9).
-- optimization RedisCluster.
+- Fixed #9
+- Optimization RedisCluster.
 
 ### v1.0.4
 - Upgrade distributed lock API.
