@@ -15,9 +15,12 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.concurrent.*;
 
-public class RealRedisLockTest {
+/**
+ * real test by Redis cluster
+ */
+public class RealRedisClusterLockTest {
 
-    private static Logger logger = LoggerFactory.getLogger(RealRedisLockTest.class);
+    private static Logger logger = LoggerFactory.getLogger(RealRedisClusterLockTest.class);
     private static ExecutorService executorServicePool;
 
 
@@ -27,7 +30,7 @@ public class RealRedisLockTest {
 
 
     public static void main(String[] args) throws InterruptedException {
-        RealRedisLockTest redisLockTest = new RealRedisLockTest();
+        RealRedisClusterLockTest redisLockTest = new RealRedisClusterLockTest();
         redisLockTest.init();
         initThread();
 
@@ -116,10 +119,10 @@ public class RealRedisLockTest {
             //测试阻塞锁
             try {
                 redisLock.lock("abc", "12345");
-                logger.info("加锁成功=========");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            logger.info("加锁成功=========");
             redisLock.unlock("abc","12345") ;
         }
     }

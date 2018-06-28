@@ -158,11 +158,15 @@ public class RedisLock {
         while (blockTime >= 0) {
             if (connection instanceof Jedis){
                 result = ((Jedis) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME) ;
-                ((Jedis) connection).close();
+                if (LOCK_MSG.equals(request)){
+                    ((Jedis) connection).close();
+                }
             }else {
                 result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME) ;
                 try {
-                    ((JedisCluster) connection).close();
+                    if (LOCK_MSG.equals(request)){
+                        ((JedisCluster) connection).close();
+                    }
                 } catch (IOException e) {
                     logger.error("IOException",e);
                 }
