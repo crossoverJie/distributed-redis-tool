@@ -113,7 +113,7 @@ public class RedisLock {
         for (; ;) {
             if (connection instanceof Jedis){
                 result = ((Jedis)connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
-                if (LOCK_MSG.equals(request)){
+                if (LOCK_MSG.equals(result)){
                     ((Jedis) connection).close();
                 }
             }else {
@@ -146,7 +146,7 @@ public class RedisLock {
         while (blockTime >= 0) {
             if (connection instanceof Jedis){
                 result = ((Jedis) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME) ;
-                if (LOCK_MSG.equals(request)){
+                if (LOCK_MSG.equals(result)){
                     ((Jedis) connection).close();
                 }
             }else {
