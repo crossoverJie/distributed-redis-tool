@@ -1,7 +1,6 @@
 package com.crossoverjie.distributed.lock;
 
 import com.crossoverjie.distributed.constant.RedisToolsConstant;
-import com.crossoverjie.distributed.limit.RedisLimit;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -9,7 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import redis.clients.jedis.*;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.concurrent.*;
 
@@ -29,7 +31,7 @@ public class RedisLockTest {
         redisLockTest.init();
         initThread();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             executorServicePool.execute(new Worker(i));
         }
 
@@ -50,8 +52,8 @@ public class RedisLockTest {
     private void init() {
 
         JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxIdle(50);
-        config.setMaxTotal(50);
+        config.setMaxIdle(100);
+        config.setMaxTotal(100);
         config.setMaxWaitMillis(10000);
         config.setTestOnBorrow(true);
         config.setTestOnReturn(true);
@@ -100,13 +102,24 @@ public class RedisLockTest {
 
         @Override
         public void run() {
-            boolean limit = redisLock.tryLock("abc", "12345");
-            if (limit) {
-                logger.info("加锁成功=========");
-            } else {
-                logger.info("加锁失败");
+            //测试非阻塞锁
+            //boolean limit = redisLock.tryLock("abc", "12345");
+            //if (limit) {
+            //    logger.info("加锁成功=========");
+            //} else {
+            //    logger.info("加锁失败");
+            //
+            //}
+            //redisLock.unlock("abc","12345") ;
 
+
+            //测试阻塞锁
+            try {
+                redisLock.lock("abc", "12345");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            logger.info("加锁成功=========");
             redisLock.unlock("abc","12345") ;
         }
     }
