@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/crossoverJie/distributed-redis-tool.svg?branch=master)](https://travis-ci.org/crossoverJie/distributed-redis-tool)
 [![codecov](https://codecov.io/gh/crossoverJie/distributed-redis-tool/branch/master/graph/badge.svg)](https://codecov.io/gh/crossoverJie/distributed-redis-tool)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/top.crossoverjie.opensource/distributed-redis-tool/badge.svg)](https://maven-badges.herokuapp.com/maven-central/top.crossoverjie.opensource/distributed-redis-tool/)
+[![QQ群](https://img.shields.io/badge/QQ%E7%BE%A4-787381170-yellowgreen.svg)](https://jq.qq.com/?_wv=1027&k=5HPYvQk)
 [![](https://badge.juejin.im/entry/5ae3d0c56fb9a07aae14ea59/likes.svg?style=flat-square)](https://juejin.im/post/5ae3d08b6fb9a07a9e4cf71c)
 
 
