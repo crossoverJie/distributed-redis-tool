@@ -21,10 +21,9 @@ public class ScriptUtil {
         StringBuilder sb = new StringBuilder();
 
         InputStream stream = ScriptUtil.class.getClassLoader().getResourceAsStream(path);
-        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-        try {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(stream))){
 
-            String str = "";
+            String str;
             while ((str = br.readLine()) != null) {
                 sb.append(str).append(System.lineSeparator());
             }
