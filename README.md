@@ -273,7 +273,7 @@ Spring xml:
 public void anyMethod(){}
 ```
 
-It can be used for any Methods.
+It can be used for any methods.
 
 
 
