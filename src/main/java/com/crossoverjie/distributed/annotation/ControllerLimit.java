@@ -7,5 +7,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface ControllerLimit {
 
-
+	/**
+     * Error code
+     * @return
+     * code
+     */
+    int errorCode() default 500;
 }
