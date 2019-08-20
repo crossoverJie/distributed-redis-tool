@@ -74,7 +74,7 @@ public class RedisLock {
     }
 
     /**
-     * Non-blocking lock
+     * Non-blocking lock, default timeout :10s
      *
      * @param key     lock business type
      * @param request value
@@ -82,22 +82,7 @@ public class RedisLock {
      * false lock fail
      */
     public boolean tryLock(String key, String request) {
-        //get connection
-        Object connection = getConnection();
-        String result ;
-        if (connection instanceof Jedis){
-            result =  ((Jedis) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
-            ((Jedis) connection).close();
-        }else {
-            result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
-
-        }
-
-        if (LOCK_MSG.equals(result)) {
-            return true;
-        } else {
-            return false;
-        }
+        return tryLock(key,request,10*TIME);
     }
 
     /**
