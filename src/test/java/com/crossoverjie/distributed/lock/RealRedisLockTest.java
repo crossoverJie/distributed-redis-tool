@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.HostAndPort;
@@ -62,21 +63,21 @@ public class RealRedisLockTest {
         redisClusterConfiguration.addClusterNode(new RedisNode("10.19.13.51", 7000));
 
         //单机
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(config);
+        JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory(config);
 
         //集群
-        //JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration) ;
-        jedisConnectionFactory.setHostName("47.98.194.60");
-        jedisConnectionFactory.setPort(6379);
-        jedisConnectionFactory.setPassword("");
-        jedisConnectionFactory.setTimeout(100000);
-        jedisConnectionFactory.afterPropertiesSet();
-        //jedisConnectionFactory.setShardInfo(new JedisShardInfo("47.98.194.60", 6379));
+        //RedisConnectionFactory redisConnectionFactory = new RedisConnectionFactory(redisClusterConfiguration) ;
+        redisConnectionFactory.setHostName("47.98.194.60");
+        redisConnectionFactory.setPort(6379);
+        redisConnectionFactory.setPassword("");
+        redisConnectionFactory.setTimeout(100000);
+        redisConnectionFactory.afterPropertiesSet();
+        //redisConnectionFactory.setShardInfo(new JedisShardInfo("47.98.194.60", 6379));
         //JedisCluster jedisCluster = new JedisCluster(hostAndPort);
 
         HostAndPort hostAndPort = new HostAndPort("10.19.13.51", 7000);
         JedisCluster jedisCluster = new JedisCluster(hostAndPort);
-        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
+        redisLock = new RedisLock.Builder(redisConnectionFactory, RedisToolsConstant.SINGLE)
                 .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
@@ -125,16 +126,14 @@ public class RealRedisLockTest {
             //}
 
 
-
             //测试阻塞锁
             try {
                 redisLock.lock("abc", "12345");
                 logger.info("加锁成功=========");
-                redisLock.unlock("abc","12345") ;
+                redisLock.unlock("abc", "12345");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
 
 
             //测试阻塞锁 + 阻塞时间

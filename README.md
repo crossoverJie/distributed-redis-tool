@@ -91,11 +91,11 @@ public class RedisLockConfig {
     
     
     @Autowired
-    private JedisConnectionFactory jedisConnectionFactory;
+    private RedisConnectionFactory redisConnectionFactory;
     
     @Bean
     public RedisLock build() {
-        RedisLock redisLock = new RedisLock.Builder(jedisConnectionFactory,RedisToolsConstant.SINGLE)
+        RedisLock redisLock = new RedisLock.Builder(redisConnectionFactory,RedisToolsConstant.SINGLE)
                 .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
@@ -181,11 +181,11 @@ public class RedisLimitConfig {
     private int limit;
     
     @Autowired
-    private JedisConnectionFactory jedisConnectionFactory;
+    private RedisConnectionFactory redisConnectionFactory;
     
     @Bean
     public RedisLimit build() {
-        RedisLimit redisLimit = new RedisLimit.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
+        RedisLimit redisLimit = new RedisLimit.Builder(redisConnectionFactory, RedisToolsConstant.SINGLE)
                 .limit(limit)
                 .build();
         return redisLimit;

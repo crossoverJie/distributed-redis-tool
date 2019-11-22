@@ -4,15 +4,13 @@ import com.crossoverjie.distributed.constant.RedisToolsConstant;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.redis.connection.RedisClusterConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisClusterConnection;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.JedisCluster;
-
 
 import java.util.UUID;
 
@@ -22,7 +20,7 @@ public class RedisClusterLockTest {
     private RedisLock redisLock;
 
     @Mock
-    private JedisConnectionFactory jedisConnectionFactory ;
+    private RedisConnectionFactory redisConnectionFactory;
 
     @Mock
     private JedisCluster jedisCluster;
@@ -31,15 +29,15 @@ public class RedisClusterLockTest {
     public void setBefore() {
         MockitoAnnotations.initMocks(this);
 
-        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.CLUSTER)
+        redisLock = new RedisLock.Builder(redisConnectionFactory, RedisToolsConstant.CLUSTER)
                 .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
 
 
         RedisClusterConnection clusterConnection = new JedisClusterConnection(jedisCluster);
-        Mockito.when(jedisConnectionFactory.getClusterConnection()).thenReturn(clusterConnection);
-        jedisCluster = (JedisCluster)clusterConnection.getNativeConnection();
+        Mockito.when(redisConnectionFactory.getClusterConnection()).thenReturn(clusterConnection);
+        jedisCluster = (JedisCluster) clusterConnection.getNativeConnection();
 
     }
 
@@ -151,7 +149,7 @@ public class RedisClusterLockTest {
         Assert.assertFalse(lock);
 
         //check was called 2 times
-        Mockito.verify(jedisCluster,Mockito.times(2)).set(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+        Mockito.verify(jedisCluster, Mockito.times(2)).set(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
                 Mockito.anyString(), Mockito.anyLong());
 
     }
@@ -159,7 +157,7 @@ public class RedisClusterLockTest {
     @Test
     public void unlock() throws Exception {
 
-        Mockito.when(jedisCluster.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(1L) ;
+        Mockito.when(jedisCluster.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(1L);
 
         boolean locktest = redisLock.unlock("test", "ec8ebca0-14ba0-4b23-99a8-b35fbba3629e");
 
@@ -171,7 +169,7 @@ public class RedisClusterLockTest {
     @Test
     public void unlockFalse() throws Exception {
 
-        Mockito.when(jedisCluster.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(0L) ;
+        Mockito.when(jedisCluster.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(0L);
 
         boolean locktest = redisLock.unlock("test", "ec8ebca0-14ba0-4b23-99a8-b35fbba3629e");
 

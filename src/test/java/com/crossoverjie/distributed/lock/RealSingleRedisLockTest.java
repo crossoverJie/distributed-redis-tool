@@ -5,16 +5,13 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * real test by single Redis
@@ -63,13 +60,13 @@ public class RealSingleRedisLockTest {
         config.setTestOnReturn(true);
 
         //单机
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(config) ;
+        JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory(config);
 
-        jedisConnectionFactory.setTimeout(100000);
-        jedisConnectionFactory.afterPropertiesSet();
-        jedisConnectionFactory.setShardInfo(new JedisShardInfo("127.0.0.1", 6379));
+        redisConnectionFactory.setTimeout(100000);
+        redisConnectionFactory.afterPropertiesSet();
+        redisConnectionFactory.setShardInfo(new JedisShardInfo("127.0.0.1", 6379));
 
-        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
+        redisLock = new RedisLock.Builder(redisConnectionFactory, RedisToolsConstant.SINGLE)
                 .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
@@ -100,7 +97,7 @@ public class RealSingleRedisLockTest {
             if (limit) {
                 logger.info("加锁成功=========");
                 boolean unlock = redisLock.unlock("abc", "12345");
-                logger.info("解锁结果===[{}]",unlock);
+                logger.info("解锁结果===[{}]", unlock);
             } else {
                 logger.info("加锁失败");
 
@@ -126,7 +123,6 @@ public class RealSingleRedisLockTest {
             //    e.printStackTrace();
             //}
             //redisLock.unlock("abc","12345") ;
-
 
 
             //测试阻塞锁 + 阻塞时间
