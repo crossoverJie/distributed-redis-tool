@@ -22,9 +22,9 @@ This is a simple distributed tools based on Redis.
 
 * [Features](https://github.com/crossoverJie/distributed-redis-tool#features-1)
 * [Native API](https://github.com/crossoverJie/distributed-redis-tool#native-api)
-* [@ControllerLimit API](https://github.com/crossoverJie/distributed-redis-tool#controllerlimit)
-* [@SpringControllerLimit](https://github.com/crossoverJie/distributed-redis-tool#springcontrollerlimit)
 * [@CommonLimit API](https://github.com/crossoverJie/distributed-redis-tool#controllerlimit)
+* [@SpringControllerLimit](https://github.com/crossoverJie/distributed-redis-tool#springcontrollerlimit)
+
 
 
 Visit this [website](https://www.google.com/search?newwindow=1&ei=SdjjWu3XKYXSU_SKgIgH&q=Distributed+site%3AcrossoverJie.top&oq=Distributed+site%3AcrossoverJie.top&gs_l=psy-ab.3...9719.30867.0.31049.47.33.7.0.0.0.519.5126.4-11j1.12.0....0...1.1j4.64.psy-ab..31.0.0....0.ltPqVipC_iE) for more information.
@@ -193,10 +193,13 @@ public class RedisLimitConfig {
 }
 ```
 
-2. Scan `com.crossoverjie.distributed.intercept` package.
+2. Scan packages.
 
 ```java
 @ComponentScan(value = "com.crossoverjie.distributed.intercept")
+
+# RedisLimitConfig's package
+@ComponentScan(value = "xx.xxx.config")
 ```
 
 #### Native API:
@@ -213,27 +216,13 @@ public class RedisLimitConfig {
 
 Other apis:
 
-#### @ControllerLimit
+#### @CommonLimit
 
 ```java
-    @ControllerLimit
-    public BaseResponse<OrderNoResVO> getOrderNoLimit(@RequestBody OrderNoReqVO orderNoReq) {
-        BaseResponse<OrderNoResVO> res = new BaseResponse();
-        res.setReqNo(orderNoReq.getReqNo());
-        if (null == orderNoReq.getAppId()){
-            throw new SBCException(StatusEnum.FAIL);
-        }
-        OrderNoResVO orderNoRes = new OrderNoResVO() ;
-        orderNoRes.setOrderId(DateUtil.getLongTime());
-        res.setCode(StatusEnum.SUCCESS.getCode());
-        res.setMessage(StatusEnum.SUCCESS.getMessage());
-        res.setDataBody(orderNoRes);
-        return res ;
-    }
+@CommonLimit
+@RequestMapping("/xx")
+public void anyMethod(){}
 ```
-
-Used for `@RequestMapping`.
-
 
 #### @SpringControllerLimit
 
@@ -266,12 +255,6 @@ Spring xml:
     </mvc:interceptors>
 ```
 
-#### @CommonLimit
-
-```java
-@CommonLimit
-public void anyMethod(){}
-```
 
 It can be used for any methods.
 
