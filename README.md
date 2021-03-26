@@ -22,7 +22,7 @@ This is a simple distributed tools based on Redis.
 
 * [Features](https://github.com/crossoverJie/distributed-redis-tool#features-1)
 * [Native API](https://github.com/crossoverJie/distributed-redis-tool#native-api)
-* [@CommonLimit API](https://github.com/crossoverJie/distributed-redis-tool#controllerlimit)
+* [@CommonLimit API](https://github.com/crossoverJie/distributed-redis-tool#commonlimit)
 * [@SpringControllerLimit](https://github.com/crossoverJie/distributed-redis-tool#springcontrollerlimit)
 
 
