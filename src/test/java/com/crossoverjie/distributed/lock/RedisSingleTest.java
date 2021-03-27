@@ -4,17 +4,13 @@ import com.crossoverjie.distributed.constant.RedisToolsConstant;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.redis.connection.RedisClusterConnection;
 import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.jedis.JedisClusterConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnection;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
 
 import java.util.UUID;
 
@@ -22,7 +18,7 @@ import java.util.UUID;
  * Function:
  *
  * @author crossoverJie
- *         Date: 28/03/2018 23:35
+ * Date: 28/03/2018 23:35
  * @since JDK 1.8
  */
 public class RedisSingleTest {
@@ -30,7 +26,7 @@ public class RedisSingleTest {
     private RedisLock redisLock;
 
     @Mock
-    private JedisConnectionFactory jedisConnectionFactory ;
+    private RedisConnectionFactory redisConnectionFactory;
 
     @Mock
     private Jedis jedis;
@@ -38,17 +34,16 @@ public class RedisSingleTest {
     @Before
     public void setBefore() {
         MockitoAnnotations.initMocks(this);
-        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.SINGLE)
+        redisLock = new RedisLock.Builder(redisConnectionFactory, RedisToolsConstant.SINGLE)
                 .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
 
 
+        RedisConnection redisConnection = new JedisConnection(jedis);
+        Mockito.when(redisConnectionFactory.getConnection()).thenReturn(redisConnection);
 
-        RedisConnection redisConnection = new JedisConnection(jedis) ;
-        Mockito.when(jedisConnectionFactory.getConnection()).thenReturn(redisConnection);
-
-        jedis = (Jedis)redisConnection.getNativeConnection();
+        jedis = (Jedis) redisConnection.getNativeConnection();
 
 
     }
@@ -56,7 +51,7 @@ public class RedisSingleTest {
     @Test
     public void unlock() throws Exception {
 
-        Mockito.when(jedis.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(1L) ;
+        Mockito.when(jedis.eval(Mockito.anyString(), Mockito.anyList(), Mockito.anyList())).thenReturn(1L);
 
         boolean locktest = redisLock.unlock("test", "ec8ebca0-14ba0-4b23-99a8-b35fbba3629e");
 
@@ -86,7 +81,6 @@ public class RedisSingleTest {
     }
 
 
-
     @Test
     public void lock() throws Exception {
 
@@ -101,8 +95,6 @@ public class RedisSingleTest {
         Mockito.verify(jedis).set(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
                 Mockito.anyString(), Mockito.anyInt());
     }
-
-
 
 
     @Test
@@ -137,11 +129,10 @@ public class RedisSingleTest {
         Assert.assertFalse(lock);
 
         //check was called 2 times
-        Mockito.verify(jedis,Mockito.times(2)).set(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+        Mockito.verify(jedis, Mockito.times(2)).set(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
                 Mockito.anyString(), Mockito.anyInt());
 
     }
-
 
 
     @Test

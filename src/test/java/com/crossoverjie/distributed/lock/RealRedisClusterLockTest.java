@@ -65,16 +65,16 @@ public class RealRedisClusterLockTest {
         redisClusterConfiguration.addClusterNode(new RedisNode("10.19.13.51", 7000));
 
         //集群
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration) ;
+        JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory(redisClusterConfiguration);
 
-        jedisConnectionFactory.setTimeout(100000);
-        jedisConnectionFactory.afterPropertiesSet();
-        //jedisConnectionFactory.setShardInfo(new JedisShardInfo("47.98.194.60", 6379));
+        redisConnectionFactory.setTimeout(100000);
+        redisConnectionFactory.afterPropertiesSet();
+        //redisConnectionFactory.setShardInfo(new JedisShardInfo("47.98.194.60", 6379));
         //JedisCluster jedisCluster = new JedisCluster(hostAndPort);
 
         HostAndPort hostAndPort = new HostAndPort("10.19.13.51", 7000);
         JedisCluster jedisCluster = new JedisCluster(hostAndPort);
-        redisLock = new RedisLock.Builder(jedisConnectionFactory, RedisToolsConstant.CLUSTER)
+        redisLock = new RedisLock.Builder(redisConnectionFactory, RedisToolsConstant.CLUSTER)
                 .lockPrefix("lock_")
                 .sleepTime(100)
                 .build();
@@ -105,7 +105,7 @@ public class RealRedisClusterLockTest {
             if (limit) {
                 logger.info("加锁成功=========");
                 boolean unlock = redisLock.unlock("abc", "12345");
-                logger.info("解锁结果===[{}]",unlock);
+                logger.info("解锁结果===[{}]", unlock);
             } else {
                 logger.info("加锁失败");
 
@@ -131,7 +131,6 @@ public class RealRedisClusterLockTest {
             //    e.printStackTrace();
             //}
             //redisLock.unlock("abc","12345") ;
-
 
 
             //测试阻塞锁 + 阻塞时间

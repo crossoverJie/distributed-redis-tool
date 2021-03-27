@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.RedisClusterConnection;
 import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
@@ -16,7 +16,7 @@ import java.util.Collections;
  * Function: distributed lock
  *
  * @author crossoverJie
- *         Date: 26/03/2018 11:09
+ * Date: 26/03/2018 11:09
  * @since JDK 1.8
  */
 public class RedisLock {
@@ -34,8 +34,8 @@ public class RedisLock {
 
     private int sleepTime;
 
-    private JedisConnectionFactory jedisConnectionFactory;
-    private int type ;
+    private RedisConnectionFactory redisConnectionFactory;
+    private int type;
 
     /**
      * time millisecond
@@ -48,8 +48,8 @@ public class RedisLock {
     private String script;
 
     private RedisLock(Builder builder) {
-        this.jedisConnectionFactory = builder.jedisConnectionFactory;
-        this.type = builder.type ;
+        this.redisConnectionFactory = builder.redisConnectionFactory;
+        this.type = builder.type;
         this.lockPrefix = builder.lockPrefix;
         this.sleepTime = builder.sleepTime;
 
@@ -59,16 +59,17 @@ public class RedisLock {
 
     /**
      * get Redis connection
+     *
      * @return
      */
     private Object getConnection() {
-        Object connection ;
-        if (type == RedisToolsConstant.SINGLE){
-            RedisConnection redisConnection = jedisConnectionFactory.getConnection();
+        Object connection;
+        if (type == RedisToolsConstant.SINGLE) {
+            RedisConnection redisConnection = redisConnectionFactory.getConnection();
             connection = redisConnection.getNativeConnection();
-        }else {
-            RedisClusterConnection clusterConnection = jedisConnectionFactory.getClusterConnection();
-            connection = clusterConnection.getNativeConnection() ;
+        } else {
+            RedisClusterConnection clusterConnection = redisConnectionFactory.getClusterConnection();
+            connection = clusterConnection.getNativeConnection();
         }
         return connection;
     }
@@ -82,7 +83,7 @@ public class RedisLock {
      * false lock fail
      */
     public boolean tryLock(String key, String request) {
-        return tryLock(key,request,10*TIME);
+        return tryLock(key, request, 10 * TIME);
     }
 
     /**
@@ -94,15 +95,15 @@ public class RedisLock {
     public void lock(String key, String request) throws InterruptedException {
         //get connection
         Object connection = getConnection();
-        String result ;
-        for (; ;) {
-            if (connection instanceof Jedis){
-                result = ((Jedis)connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
-                if (LOCK_MSG.equals(result)){
+        String result;
+        for (; ; ) {
+            if (connection instanceof Jedis) {
+                result = ((Jedis) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
+                if (LOCK_MSG.equals(result)) {
                     ((Jedis) connection).close();
                 }
-            }else {
-                result = ((JedisCluster)connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
+            } else {
+                result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
             }
 
             if (LOCK_MSG.equals(result)) {
@@ -127,15 +128,15 @@ public class RedisLock {
 
         //get connection
         Object connection = getConnection();
-        String result ;
+        String result;
         while (blockTime >= 0) {
-            if (connection instanceof Jedis){
-                result = ((Jedis) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME) ;
-                if (LOCK_MSG.equals(result)){
+            if (connection instanceof Jedis) {
+                result = ((Jedis) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
+                if (LOCK_MSG.equals(result)) {
                     ((Jedis) connection).close();
                 }
-            }else {
-                result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME) ;
+            } else {
+                result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, 10 * TIME);
             }
             if (LOCK_MSG.equals(result)) {
                 return true;
@@ -160,12 +161,12 @@ public class RedisLock {
     public boolean tryLock(String key, String request, int expireTime) {
         //get connection
         Object connection = getConnection();
-        String result ;
+        String result;
 
-        if (connection instanceof Jedis){
+        if (connection instanceof Jedis) {
             result = ((Jedis) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
             ((Jedis) connection).close();
-        }else {
+        } else {
             result = ((JedisCluster) connection).set(lockPrefix + key, request, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
         }
 
@@ -225,15 +226,15 @@ public class RedisLock {
          */
         private static final int DEFAULT_SLEEP_TIME = 100;
 
-        private JedisConnectionFactory jedisConnectionFactory = null ;
+        private RedisConnectionFactory redisConnectionFactory = null;
 
-        private int type ;
+        private int type;
 
         private String lockPrefix = DEFAULT_LOCK_PREFIX;
         private int sleepTime = DEFAULT_SLEEP_TIME;
 
-        public Builder(JedisConnectionFactory jedisConnectionFactory, int type) {
-            this.jedisConnectionFactory = jedisConnectionFactory;
+        public Builder(RedisConnectionFactory redisConnectionFactory, int type) {
+            this.redisConnectionFactory = redisConnectionFactory;
             this.type = type;
         }
 
